@@ -1,0 +1,22 @@
+{
+  "name": "Boxophobic.SkyboxCubemapExtended.Editor",
+  "references": [
+    "GUID:10f1dd4cfd6afb54da274d7d818bd8f6",
+    "GUID:825ad574da7360d4e8aea558f272972e",
+    "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+    "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+    "GUID:0acc523941302664db1f4e527237feb3",
+    "GUID:27619889b8ba8c24980f49ee34dbb44a"
+  ],
+  "optionalUnityReferences": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": []
+}
