@@ -6,10 +6,6 @@ TagManager:
   tags:
   - Task
   - LevelCompleted
-  - Escalator
-  - Escalator Start
-  - Escalator End
-  - Walls
   layers:
   - Default
   - TransparentFX
@@ -19,7 +15,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Fade
   - 
   - 
   - 

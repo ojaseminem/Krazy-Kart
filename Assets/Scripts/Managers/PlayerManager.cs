@@ -1,4 +1,5 @@
 ﻿using Player;
+using Player.ShoppingCart;
 using UnityEngine;
 
 namespace Managers
@@ -11,5 +12,7 @@ namespace Managers
         {
             player.canMove = toggle;
         }
+        
+        //TODO add a functionality to add items as hinge joints in cart
     }
 }

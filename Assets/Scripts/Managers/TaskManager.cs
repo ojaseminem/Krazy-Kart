@@ -1,85 +1,58 @@
-﻿using System;
-using TMPro;
-using UnityEngine;
-using Utils;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
 namespace Managers
 {
     public class TaskManager : MonoBehaviour
     {
-        public bool checkForInput;
-        public TextMeshProUGUI sentenceOutput;
-    
-        [HideInInspector] public string currentSentence;
-    
-        private UiManager _uiManager;
-        private string _remainingSentence;
-
-        private void Start()
+        public void InitTaskBriefing(ItemType itemType)
         {
-            _uiManager = UiManager.Instance;
-            sentenceOutput = _uiManager.taskWindow.taskText;
+            var briefingText = GameManager.instance.levelData.briefingText;
+            
+            FinalizeBriefing(briefingText, itemType);
+
+            var briefingWindow = GameManager.instance.uiManager.briefingWindow;
+            
+            var ld = GameManager.instance.levelData;
+            
+            var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
+            taskText.text = FinalizeBriefing(ld.briefingText, itemType);
+
+            /*switch (ld.levelDifficulty)
+            {
+                case LevelDifficulty.Easy:
+                    for (int i = 0; i < ld.taskCountEasy; i++)
+                    {
+                        print("SpawnedText");
+                        var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
+                        taskText.text = FinalizeBriefing(ld.briefingText, itemType);
+                    }
+                    break;
+                case LevelDifficulty.Average:
+                    for (int i = 0; i < ld.taskCountAverage; i++)
+                    {
+                        var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
+                        taskText.text = FinalizeBriefing(ld.briefingText, itemType);
+                    }
+                    break;
+                case LevelDifficulty.Hard:
+                    for (int i = 0; i < ld.taskCountHard; i++)
+                    {
+                        var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
+                        taskText.text = FinalizeBriefing(ld.briefingText, itemType);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }*/
         }
 
-        private void Update()
+        private string FinalizeBriefing(string briefValue, ItemType itemName)
         {
-            if (!checkForInput) return;
-            CheckInput();
-        }
+            var finalBrief = "";
 
-        public void SetCurrentSentence()
-        {
-            checkForInput = true;
-            currentSentence = RandomSentence();
-        
-            _uiManager.InitializeWindow(Windows.Task);
-        
-            SetRemainingSentence(currentSentence);
-        }
+            finalBrief = string.Format(briefValue, $"{itemName}");
 
-        private void SetRemainingSentence(string newString)
-        {
-            _remainingSentence = newString;
-            sentenceOutput.text = _remainingSentence;
-        }
-
-        private void CheckInput()
-        {
-            if (!Input.anyKeyDown) return;
-        
-            string keysPressed = Input.inputString;
-            if (keysPressed.Length == 1) EnterLetter(keysPressed);
-        }
-    
-        private void EnterLetter(string typedLetter)
-        {
-            if (!IsCorrectLetter(typedLetter)) return;
-            RemoveLetter();
-
-            if (!IsSentenceComplete()) return;
-            checkForInput = false;
-        
-            _uiManager.CloseWindow(Windows.Task);
-            GameManager.Instance.ChangeState(GameState.Playing);
-        }
-    
-        private bool IsCorrectLetter(string letter) => _remainingSentence.IndexOf(letter, StringComparison.Ordinal) == 0;
-
-        private void RemoveLetter()
-        {
-            string newString = _remainingSentence.Remove(0, 1);
-            SetRemainingSentence(newString);
-        }
-
-        private bool IsSentenceComplete() => _remainingSentence.Length == 0;
-
-        private string RandomSentence()
-        {
-            int randomSentenceIndex = Random.Range(0, JsonReader.GetSentenceBank().Length);
-            string randomSentence = JsonReader.GetSentenceBank()[randomSentenceIndex];
-
-            return randomSentence;
+            return finalBrief;
         }
     }
 }

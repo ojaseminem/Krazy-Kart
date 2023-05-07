@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64bfe508a263425c9120489734c485fe, type: 3}
+  m_Name: ItemData
+  m_EditorClassIdentifier: 
+  itemHolders:
+  - {fileID: 8994639357706492594, guid: 1829428f057af7a46bff1beaf02f5849, type: 3}
+  - {fileID: 8994639357706492594, guid: 83418b7ea071c3a439f1757f4fdf1d2e, type: 3}
+  - {fileID: 8994639357706492594, guid: 45b52e3ff3b14fd4d9d80d60b80438c5, type: 3}
+  - {fileID: 8994639357706492594, guid: 57e968ae825abd941aa32595fbf60466, type: 3}
+  - {fileID: 8994639357706492594, guid: ef2d5e89199610e40930759919ee4279, type: 3}
+  - {fileID: 8994639357706492594, guid: 96ddb499554a5a247922e31780f03df4, type: 3}
+  - {fileID: 8994639357706492594, guid: 4f8a738d475f17a4d9a70521dbd92a2e, type: 3}
+  - {fileID: 8994639357706492594, guid: 3ddc3b3fd056df44bbeb46cfdc0bf619, type: 3}
+  - {fileID: 8994639357706492594, guid: b2c4357fee6d3f546a1325a086a4219f, type: 3}
+  - {fileID: 8994639357706492594, guid: d441482508a849246b99c719073cd01d, type: 3}
+  groceries:
+  - {fileID: 5640211186472339272, guid: 4b70ab78a6423ce419088f3c32eb1476, type: 3}
+  - {fileID: 5988571714710851040, guid: 723ff45ade6c9b64786cf69e6e1e57de, type: 3}
+  - {fileID: 6541722557225328129, guid: 65238a613a7630f448787de499e44a34, type: 3}
+  - {fileID: 8492059746495828347, guid: 6efb2cac9e27db64292c91c95bf4b85c, type: 3}
+  - {fileID: 2302969293381619527, guid: 74aa81b4b7d403546bba393c262731aa, type: 3}
+  - {fileID: 9076990152891007818, guid: 35d5b62c9137622479352dca59890468, type: 3}
+  - {fileID: 3886195008341101843, guid: dc704bcffa93f0b459e3819c11459a96, type: 3}
+  - {fileID: 7457124816683194662, guid: 19e9d998f58ebd4499c985478247a599, type: 3}
+  - {fileID: 2755226709564595415, guid: 0367d21268c7432478856cdfd3d3fde3, type: 3}
+  - {fileID: 7834370894700125733, guid: 06564b1993be48c479f86e030086d7ba, type: 3}
+  arcade: []
+  music: []
+  fastFood: []
+  jewellery: []
+  clothing: []
+  bakery: []
+  spawnedItems: []

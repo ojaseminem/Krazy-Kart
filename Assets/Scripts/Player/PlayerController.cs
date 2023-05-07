@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using UnityEngine;
 using Utils;
 
@@ -6,13 +7,6 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
-        #region Singleton
-
-        public static PlayerController Instance;
-        private void Awake() => Instance = this;
-
-        #endregion
-
         public bool canMove;
 
         [SerializeField] private float speed = 5;
@@ -64,13 +58,13 @@ namespace Player
         {
             if (other.CompareTag("Task"))
             {
-                GameManager.Instance.ChangeState(GameState.Task);
+                GameManager.instance.ChangeState(GameState.Task);
                 other.GetComponent<BoxCollider>().enabled = false;
             }
 
             if (other.CompareTag("LevelCompleted"))
             {
-                GameManager.Instance.ChangeState(GameState.ScoreCalculation);
+                GameManager.instance.ChangeState(GameState.ScoreCalculation);
             }
         }
     }

@@ -11,20 +11,23 @@ namespace Managers
     {
         #region Singleton
 
-        public static GameManager Instance;
-        private void Awake() => Instance = this;
+        public static GameManager instance;
+        private void Awake() => instance = this;
 
         #endregion
 
         [Header("Managers")]
-        [SerializeField] private PlayerManager playerManager;
-        [SerializeField] private UiManager uiManager;
-        [SerializeField] private TaskManager taskManager;
+        public PlayerManager playerManager;
+        public UiManager uiManager;
+        public SentenceManager sentenceManager;
+        public ShoppingManager shoppingManager;
+        public TaskManager taskManager;
+        public TimeManager timeManager;
 
-        [Header("Data")]
-        public BriefingData briefingData;
-        public TaskData taskData;
-        
+        [Header("Data")] 
+        public LevelData levelData;
+        public ItemData itemData;
+
         private void Start()
         {
             ChangeState(GameState.Briefing);
@@ -52,6 +55,10 @@ namespace Managers
     
         private void Briefing()
         {
+            itemData.spawnedItems.Clear();
+            
+            shoppingManager.InitShopping(levelData, itemData);
+
             playerManager.SetPlayerMove(false);
             
             uiManager.InitializeWindow(Windows.Briefing);
@@ -60,6 +67,7 @@ namespace Managers
             {
                 uiManager.CloseWindow(Windows.Briefing);
                 ChangeState(GameState.Playing);
+                timeManager.StartCountDown(120f);
             }));
         }
 
@@ -74,7 +82,7 @@ namespace Managers
         {
             playerManager.SetPlayerMove(false);
 
-            taskManager.SetCurrentSentence();
+            sentenceManager.SetCurrentSentence();
         }
         
         /*IEnumerator onScoreCalculation()
@@ -96,14 +104,6 @@ namespace Managers
         }*/
     
 
-    }
-
-    public enum GameState
-    {
-        Briefing,
-        Playing,
-        Task,
-        ScoreCalculation
     }
 }
 
