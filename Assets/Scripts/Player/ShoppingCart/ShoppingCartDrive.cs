@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Utils;
 
 namespace Player.ShoppingCart
 {
@@ -18,12 +19,15 @@ namespace Player.ShoppingCart
         private bool _brake = true;
         private float _brakeForce = 5000;
         private Rigidbody _rigid;
-    
-        private float Angle => maxAngle * Input.GetAxis("Horizontal");
-        private float Torque => maxTorque * Input.GetAxis("Vertical");
-    
+
+        private int _leftOrRight;
+        
+        private float angle => maxAngle * (Input.GetAxis("Horizontal") + CustomInput.HorizontalInput);
+
+        private float torque => maxTorque * (Input.GetAxis("Vertical") + CustomInput.VerticalInput);
+
         private bool _isEmitting = false;
-    
+
         private void Start()
         {
             _wheels = GetComponentsInChildren<WheelCollider>();
@@ -46,8 +50,8 @@ namespace Player.ShoppingCart
                 }
 
                 if (!(trail.transform.localPosition.z > 0)) continue;
-            
-                bool isLeft = (Angle > 0);
+
+                bool isLeft = (angle > 0);
                 // Front trail
                 if (trail.transform.localPosition.x < 0 && isLeft)
                 {
@@ -77,7 +81,7 @@ namespace Player.ShoppingCart
                     if (wheel.transform.localPosition.x < 0f)
                     {
                         var localScale = ws.transform.localScale;
-                    
+
                         localScale = new Vector3(localScale.x * -1f, localScale.y, localScale.z);
                         ws.transform.localScale = localScale;
                     }
@@ -87,41 +91,83 @@ namespace Player.ShoppingCart
 
         private void Update()
         {
-            
             AdjustBrake();
 
-            if(!canMove) return;
-            //Rotate();
-        
+            if (!canMove) return;
+
+            AdjustCamera();
+            
+            HandleMovement();
+
             WheelMovement();
-            if (Torque >= maxTorque) {
+            
+            if (torque >= maxTorque)
+            {
                 Emitting(true);
                 _isEmitting = true;
-            } else if (_isEmitting) {
+            }
+            else if (_isEmitting)
+            {
                 Emitting(false);
                 _isEmitting = false;
             }
         }
 
+        private void HandleMovement()
+        {
+            if (_leftOrRight == 1)
+            {
+                if (CustomInput.HorizontalInput < 1f)
+                    CustomInput.HorizontalInput += 2f * Time.fixedDeltaTime;
+            }
+            else if (_leftOrRight == -1)
+            {
+                if (CustomInput.HorizontalInput > -1f)
+                    CustomInput.HorizontalInput -= 2f * Time.fixedDeltaTime;
+            }
+            else if (_leftOrRight == 0)
+            {
+                if (CustomInput.HorizontalInput > 0)
+                {
+                    CustomInput.HorizontalInput -= 2f * Time.fixedDeltaTime;
+                }
+                else if (CustomInput.HorizontalInput < 0)
+                {
+                    CustomInput.HorizontalInput += 2f * Time.fixedDeltaTime;
+                }
+            }
+        }
+
+        private void AdjustCamera()
+        {
+#if UNITY_EDITOR
+            var x = Input.GetAxis("Horizontal");
+            if (Mathf.Abs(x - 1) < .1f) cam.ToggleCameraDirection(true);
+            else if (Mathf.Abs(x + 1) < .1f) cam.ToggleCameraDirection(false);
+            else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(false);
+#endif
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            //Camera Rotation X
+            if (Mathf.Abs(CustomInput.HorizontalInput - 1) < .1f) cam.ToggleCameraDirection(true);
+            else if (Mathf.Abs(CustomInput.HorizontalInput + 1) < .1f) cam.ToggleCameraDirection(false);
+            else if (Mathf.Abs(CustomInput.HorizontalInput) < .1f) cam.ToggleCameraDirection(false);
+#endif
+            //Camera Fov based upon speed
+            cam.SetFov(torque, maxTorque);
+        }
+
         private void AdjustBrake()
         {
-            if (Input.GetButtonUp("Vertical"))
+            if (CustomInput.VerticalInput == 0)
             {
                 _brake = true;
             }
-            else if (Input.GetButtonDown("Vertical"))
+            else if (Math.Abs(CustomInput.VerticalInput + 1) < .1f || Math.Abs(CustomInput.VerticalInput - 1) < .1f)
             {
                 _brake = false;
             }
         }
-
-        /*private void Rotate()
-        {
-            if (_torque < 10)
-            {
-                transform.Rotate(0.0f, Input.GetAxis("Horizontal") * rotateSpeed, 0.0f);
-            }
-        }*/
 
         private void WheelMovement()
         {
@@ -130,14 +176,14 @@ namespace Player.ShoppingCart
                 if (wheel.transform.localPosition.z > 0)
                 {
                     // Front wheels
-                    wheel.steerAngle = Angle;
-                    wheel.motorTorque = Torque * 0.1f;
+                    wheel.steerAngle = angle;
+                    wheel.motorTorque = torque * 0.1f;
                 }
 
                 if (wheel.transform.localPosition.z < 0)
                 {
                     // Back wheels
-                    wheel.motorTorque = _brake ? 0 : Torque;
+                    wheel.motorTorque = _brake ? 0 : torque;
                 }
 
                 wheel.brakeTorque = _brake ? _brakeForce : 0;
@@ -151,20 +197,21 @@ namespace Player.ShoppingCart
                 }
             }
         }
-        
+
         public void BrakeCart()
         {
             foreach (var wheel in _wheels)
             {
                 wheel.mass = 100f;
                 wheel.brakeTorque = _brakeForce;
-                StartCoroutine(Utils.Util.WaitForSecondsRoutine(1f, () => wheel.mass = 20f));
+                StartCoroutine(Util.WaitForSecondsRoutine(1f, () => wheel.mass = 20f));
             }
         }
+        
+        public void SetLeftRight(int value) => _leftOrRight = value;
 
         private void OnCollisionEnter(Collision collision)
         {
-            
         }
     }
 }

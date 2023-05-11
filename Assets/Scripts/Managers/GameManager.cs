@@ -23,6 +23,7 @@ namespace Managers
         public ShoppingManager shoppingManager;
         public TaskManager taskManager;
         public TimeManager timeManager;
+        public NpcManager npcManager;
 
         [Header("Data")] 
         public LevelData levelData;
@@ -30,6 +31,7 @@ namespace Managers
 
         private void Start()
         {
+            Application.targetFrameRate = 60;
             ChangeState(GameState.Briefing);
         }
 

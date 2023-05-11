@@ -1,24 +1,35 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 
 namespace Player
 {
     public class CameraController : MonoBehaviour
     {
-        public bool followPlayer = true;
-        
-        [SerializeField] private Transform player;
+        [SerializeField] private CinemachineVirtualCamera camLeft, camRight;
 
-        private void LateUpdate()
+        [SerializeField] private float minFov, maxFov, defaultFov;
+        
+        public void ToggleCameraDirection(bool left)
         {
-            if(!followPlayer) return;
-            
-            var position = player.position;
-        
-            float posX = position.x;
-            float posZ = position.z;
+            if (left)
+            {
+                camRight.Priority = 2;
+                camLeft.Priority = 1;
+            }
+            else
+            {
+                camRight.Priority = 1;
+                camLeft.Priority = 2;
+            }
+        }
 
-            transform.position = new Vector3(posX, position.y, posZ);
+        public void SetFov(float torque, float maxTorque)
+        {
+            var normalizedSpeed = Mathf.Clamp01(torque / maxTorque);
+            var fov = torque < .1f ? defaultFov : Mathf.SmoothStep(minFov, maxFov, normalizedSpeed);
 
+            camLeft.m_Lens.FieldOfView = fov;
+            camRight.m_Lens.FieldOfView = fov;
         }
     }
 }
