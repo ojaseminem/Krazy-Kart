@@ -142,9 +142,9 @@ namespace Player.ShoppingCart
         {
 #if UNITY_EDITOR
             var x = Input.GetAxis("Horizontal");
-            if (Mathf.Abs(x - 1) < .1f) cam.ToggleCameraDirection(true);
-            else if (Mathf.Abs(x + 1) < .1f) cam.ToggleCameraDirection(false);
-            else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(false);
+            if (Mathf.Abs(x - 1) < .1f) cam.ToggleCameraDirection(1);
+            else if (Mathf.Abs(x + 1) < .1f) cam.ToggleCameraDirection(2);
+            else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(0);
 #endif
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -153,8 +153,6 @@ namespace Player.ShoppingCart
             else if (Mathf.Abs(CustomInput.HorizontalInput + 1) < .1f) cam.ToggleCameraDirection(false);
             else if (Mathf.Abs(CustomInput.HorizontalInput) < .1f) cam.ToggleCameraDirection(false);
 #endif
-            //Camera Fov based upon speed
-            cam.SetFov(torque, maxTorque);
         }
 
         private void AdjustBrake()

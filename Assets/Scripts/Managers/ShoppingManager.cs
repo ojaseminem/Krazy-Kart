@@ -32,7 +32,7 @@ namespace Managers
                     for (int i = 0; i < _levelData.taskCountEasy; i++)
                     {
                         var rand = Random.Range(0, totalNumOfItemCategories);
-                        SelectItemCategories(0);
+                        SelectItemCategories(rand);
                     }
 
                     break;

@@ -15,5 +15,10 @@ namespace Data
         public int taskCountEasy;
         public int taskCountAverage;
         public int taskCountHard;
+
+        [Header("Level Danger")] 
+        public float colorChangeSpeed;
+        public Color32 defaultColor;
+        public Color32 dangerColor;
     }
 }

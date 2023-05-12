@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   briefingText: Get {0}
   levelDifficulty: 0
-  taskCountEasy: 3
+  taskCountEasy: 6
   taskCountAverage: 0
   taskCountHard: 0
+  colorChangeSpeed: 1
+  defaultColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  dangerColor:
+    serializedVersion: 2
+    rgba: 4278190335

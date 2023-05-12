@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Task
   - LevelCompleted
+  - Store
   layers:
   - Default
   - TransparentFX

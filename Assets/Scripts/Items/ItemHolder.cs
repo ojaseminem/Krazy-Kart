@@ -8,5 +8,6 @@ namespace Items
         public ItemType itemType;
 
         [HideInInspector] public Item item;
+        [HideInInspector] public GameObject zone;
     }
 }

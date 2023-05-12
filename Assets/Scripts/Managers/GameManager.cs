@@ -24,6 +24,7 @@ namespace Managers
         public TaskManager taskManager;
         public TimeManager timeManager;
         public NpcManager npcManager;
+        public StoreManager storeManager;
 
         [Header("Data")] 
         public LevelData levelData;
@@ -31,13 +32,13 @@ namespace Managers
 
         private void Start()
         {
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
             ChangeState(GameState.Briefing);
         }
 
-        public void ChangeState(GameState newState)
+        public void ChangeState(GameState state)
         {
-            switch (newState)
+            switch (state)
             {
                 case GameState.Briefing:
                     Briefing();

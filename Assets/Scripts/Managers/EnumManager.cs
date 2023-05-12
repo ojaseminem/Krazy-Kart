@@ -44,29 +44,31 @@
         Cornflakes,
         Meat,
         ChickToy,
-        
-        
-        
-        Vegetables,
-        Groceries,
-        Bottles,
-        PackagedFood,
-        IceCream,
-        StuffedToys,
-        GiftBoxes,
-        ElectricGuitars,
-        NormalGuitars,
-        MusicCDs,
-        FoodPlate,
-        WaterBottles,
-        NeckPieces,
-        Rings,
-        Watches,
-        Shirts,
-        Pants,
+        StuffedToy,
+        Headphones,
         Boots,
-        ClothBoxes,
-        Pastries
+        Cake,
+        Cookies,
+        FoodTray,
+        NeckPiece,
+        Pant,
+        Pastries,
+        Rings,
+        Shoes,
+        Slippers,
+        Shirt,
+        Watches,
+        WaterBottles,
     }
 
+    public enum StoreType
+    {
+        Groceries,
+        Arcade,
+        Music,
+        FastFood,
+        Jewelry,
+        Clothing,
+        Bakery
+    }
 }

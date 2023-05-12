@@ -70,7 +70,7 @@ PrefabInstance:
     - target: {fileID: 2420375215686211047, guid: de3a27c0377208c4db19bc8ee183c2be,
         type: 3}
       propertyPath: m_Name
-      value: ItemHolder_Parent Variant 5
+      value: ItemHolder_MilkBottles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3a27c0377208c4db19bc8ee183c2be, type: 3}
