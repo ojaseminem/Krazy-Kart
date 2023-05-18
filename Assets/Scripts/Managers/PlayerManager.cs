@@ -9,8 +9,8 @@ namespace Managers
 
         public void SetPlayerMove(bool toggle) => player.canMove = toggle;
 
-        public static void EnteredStore(StoreType storeType) => GameManager.instance.storeManager.CheckStore(storeType);
+        public static void EnteredStore(StoreType storeType) => GameManager.Instance.storeManager.CheckStore(storeType);
 
-        public static void ExitedStore() => GameManager.instance.storeManager.indicate = false;
+        public static void ExitedStore() => GameManager.Instance.storeManager.indicate = false;
     }
 }

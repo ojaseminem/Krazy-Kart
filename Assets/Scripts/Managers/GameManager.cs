@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using Data;
-using Player;
-using TMPro;
+﻿using Data;
 using UnityEngine;
 using Utils;
 
@@ -11,8 +8,8 @@ namespace Managers
     {
         #region Singleton
 
-        public static GameManager instance;
-        private void Awake() => instance = this;
+        public static GameManager Instance;
+        private void Awake() => Instance = this;
 
         #endregion
 
@@ -30,16 +27,15 @@ namespace Managers
         public LevelData levelData;
         public ItemData itemData;
 
-        private void Start()
-        {
-            //Application.targetFrameRate = 60;
-            ChangeState(GameState.Briefing);
-        }
+        private void Start() => ChangeState(GameState.PreRequisites);
 
         public void ChangeState(GameState state)
         {
             switch (state)
             {
+                case GameState.PreRequisites:
+                    PreRequisites();
+                    break;
                 case GameState.Briefing:
                     Briefing();
                     break;
@@ -50,16 +46,23 @@ namespace Managers
                     Task();
                     break;
                 case GameState.ScoreCalculation:
-                    FindObjectOfType<PlayerController>().canMove = false;
+                    //FindObjectOfType<PlayerController>().canMove = false;
                     //StartCoroutine(onScoreCalculation());
                     break;
             }
         }
-    
-        private void Briefing()
+
+        private void PreRequisites()
         {
             itemData.spawnedItems.Clear();
             
+            levelData.skyboxMat.SetFloat(levelData.CubemapTransition, 0f);
+            
+            ChangeState(GameState.Briefing);
+        }
+
+        private void Briefing()
+        {
             shoppingManager.InitShopping(levelData, itemData);
 
             playerManager.SetPlayerMove(false);
@@ -70,7 +73,7 @@ namespace Managers
             {
                 uiManager.CloseWindow(Windows.Briefing);
                 ChangeState(GameState.Playing);
-                timeManager.StartCountDown(120f);
+                timeManager.StartCountDown(levelData.timerInSeconds);
             }));
         }
 

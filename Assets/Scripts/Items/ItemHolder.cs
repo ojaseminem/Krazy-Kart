@@ -6,8 +6,8 @@ namespace Items
     public class ItemHolder : MonoBehaviour
     {
         public ItemType itemType;
-
+        public GameObject zone;
+        
         [HideInInspector] public Item item;
-        [HideInInspector] public GameObject zone;
     }
 }

@@ -11,7 +11,7 @@ namespace Items
 
         private ItemData _data;
 
-        private void Start() => _data = GameManager.instance.itemData;
+        private void Start() => _data = GameManager.Instance.itemData;
 
         public void SpawnItemHolders(Item item)
         {

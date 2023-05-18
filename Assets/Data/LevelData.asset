@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83881b3b9e5e4151b001d74ceb478c5a, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: 
+  timerInSeconds: 90
   briefingText: Get {0}
   levelDifficulty: 0
   taskCountEasy: 6
   taskCountAverage: 0
   taskCountHard: 0
-  colorChangeSpeed: 1
+  colorChangeSpeed: 2
   defaultColor:
     serializedVersion: 2
     rgba: 4294967295
   dangerColor:
     serializedVersion: 2
     rgba: 4278190335
+  skyboxMat: {fileID: 2100000, guid: 1cf6f4c6e6e0518419839d3f5448dd99, type: 2}

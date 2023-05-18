@@ -58,13 +58,13 @@ namespace Player
         {
             if (other.CompareTag("Task"))
             {
-                GameManager.instance.ChangeState(GameState.Task);
+                GameManager.Instance.ChangeState(GameState.Task);
                 other.GetComponent<BoxCollider>().enabled = false;
             }
 
             if (other.CompareTag("LevelCompleted"))
             {
-                GameManager.instance.ChangeState(GameState.ScoreCalculation);
+                GameManager.Instance.ChangeState(GameState.ScoreCalculation);
             }
         }
     }

@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 32
+  zone: {fileID: 7076328300466220242}
   item: {fileID: 0}
 --- !u!1001 &1955352144193960225
 PrefabInstance:
@@ -160,6 +161,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b638d9b6896513846b3ef602e72bd825, type: 3}
+--- !u!1 &7076328300466220242 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8725413608721192435, guid: b638d9b6896513846b3ef602e72bd825,
+    type: 3}
+  m_PrefabInstance: {fileID: 1955352144193960225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7076328300466220247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8725413608721192438, guid: b638d9b6896513846b3ef602e72bd825,

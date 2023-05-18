@@ -4,7 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/ThirdPartyAssets/Waypoint Indicators/Scenes/_root.unity
+    guid: 30256e4f061f7a6418522c67434fdcf0
+  - enabled: 1
+    path: Assets/ThirdPartyAssets/Waypoint Indicators/Scenes/Scene_1.unity
+    guid: ce5f1deb6feefb74da42e6ec9e871f7c
+  - enabled: 1
+    path: Assets/ThirdPartyAssets/Waypoint Indicators/Scenes/Scene_2.unity
+    guid: 3baef934cfc4bf746a24eb9d4656ea49
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 611c22242ca4513469ebaf36ed0e87c6,
       type: 2}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Utils;
 
@@ -10,6 +11,11 @@ namespace Player.ShoppingCart
         public float rotateSpeed = 30;
         public float maxAngle = 30;
         public float maxTorque = 300;
+        public float defaultSpeedTorque = 1;
+        private float _speedUpTorque = 1;
+        public float maxSpeedUpTorque = 3;
+        public float speedUpTime = 4f;
+        public float initialSpeedHoldTime = 1f;
         public GameObject wheelShape;
 
         public bool canMove;
@@ -41,6 +47,7 @@ namespace Player.ShoppingCart
 
         private void Emitting(bool enableEmitting)
         {
+            _isEmitting = enableEmitting;
             foreach (var trail in _wheelTrails)
             {
                 if (!enableEmitting)
@@ -101,16 +108,8 @@ namespace Player.ShoppingCart
 
             WheelMovement();
             
-            if (torque >= maxTorque)
-            {
-                Emitting(true);
-                _isEmitting = true;
-            }
-            else if (_isEmitting)
-            {
-                Emitting(false);
-                _isEmitting = false;
-            }
+            if (torque >= maxTorque) Emitting(true);
+            else if (_isEmitting) Emitting(false);
         }
 
         private void HandleMovement()
@@ -145,13 +144,17 @@ namespace Player.ShoppingCart
             if (Mathf.Abs(x - 1) < .1f) cam.ToggleCameraDirection(1);
             else if (Mathf.Abs(x + 1) < .1f) cam.ToggleCameraDirection(2);
             else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(0);
+            //if (Math.Abs(CustomInput.VerticalInput - (-1)) < .2f) cam.ToggleCameraDirection(3);
 #endif
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if !UNITY_EDITOR
             //Camera Rotation X
-            if (Mathf.Abs(CustomInput.HorizontalInput - 1) < .1f) cam.ToggleCameraDirection(true);
-            else if (Mathf.Abs(CustomInput.HorizontalInput + 1) < .1f) cam.ToggleCameraDirection(false);
-            else if (Mathf.Abs(CustomInput.HorizontalInput) < .1f) cam.ToggleCameraDirection(false);
+            if (_leftOrRight == -1) cam.ToggleCameraDirection(1);
+            else if (_leftOrRight == 1) cam.ToggleCameraDirection(2);
+            else if (_leftOrRight == 0) cam.ToggleCameraDirection(0);
+
+            //if (Math.Abs(CustomInput.VerticalInput - (-1)) < .2f) cam.ToggleCameraDirection(3);
+
 #endif
         }
 
@@ -175,13 +178,13 @@ namespace Player.ShoppingCart
                 {
                     // Front wheels
                     wheel.steerAngle = angle;
-                    wheel.motorTorque = torque * 0.1f;
+                    wheel.motorTorque = torque * 0.1f * _speedUpTorque;
                 }
 
                 if (wheel.transform.localPosition.z < 0)
                 {
                     // Back wheels
-                    wheel.motorTorque = _brake ? 0 : torque;
+                    wheel.motorTorque = _brake ? 0 : torque * _speedUpTorque;
                 }
 
                 wheel.brakeTorque = _brake ? _brakeForce : 0;
@@ -205,11 +208,28 @@ namespace Player.ShoppingCart
                 StartCoroutine(Util.WaitForSecondsRoutine(1f, () => wheel.mass = 20f));
             }
         }
+
+        public void SpeedUp()
+        {
+            StartCoroutine(Speeding());
+            IEnumerator Speeding()
+            {
+                var elapsedTime = 0f;
+                _speedUpTorque = maxSpeedUpTorque;
+                
+                yield return new WaitForSeconds(initialSpeedHoldTime);
+                
+                while (elapsedTime < speedUpTime)
+                {
+                    var speedValue = Mathf.Lerp(maxSpeedUpTorque, defaultSpeedTorque, elapsedTime / speedUpTime);
+                    _speedUpTorque = speedValue;
+                    
+                    elapsedTime += Time.deltaTime;
+                    yield return null;
+                }
+            }
+        }
         
         public void SetLeftRight(int value) => _leftOrRight = value;
-
-        private void OnCollisionEnter(Collision collision)
-        {
-        }
     }
 }

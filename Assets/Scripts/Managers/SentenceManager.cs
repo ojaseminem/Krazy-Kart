@@ -18,7 +18,7 @@ namespace Managers
 
         private void Start()
         {
-            _uiManager = GameManager.instance.uiManager;
+            _uiManager = GameManager.Instance.uiManager;
             sentenceOutput = _uiManager.taskWindow.taskText;
         }
 
@@ -62,7 +62,7 @@ namespace Managers
             checkForInput = false;
         
             _uiManager.CloseWindow(Windows.Task);
-            GameManager.instance.ChangeState(GameState.Playing);
+            GameManager.Instance.ChangeState(GameState.Playing);
         }
     
         private bool IsCorrectLetter(string letter) => _remainingSentence.IndexOf(letter, StringComparison.Ordinal) == 0;

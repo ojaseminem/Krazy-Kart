@@ -7,6 +7,7 @@
 
     public enum GameState
     {
+        PreRequisites,
         Briefing,
         Playing,
         Task,

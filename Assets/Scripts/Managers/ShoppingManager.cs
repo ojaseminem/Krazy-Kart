@@ -82,7 +82,7 @@ namespace Managers
             ItemSpawner.instance.SpawnItemHolders(currentItem);
 
             //Brief the player about the task
-            GameManager.instance.taskManager.InitTaskBriefing(currentItem.itemType);
+            GameManager.Instance.taskManager.InitTaskBriefing(currentItem.itemType);
 
             _itemData.spawnedItems.Add(currentItem);
         }

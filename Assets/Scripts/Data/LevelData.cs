@@ -1,5 +1,4 @@
-﻿using Items;
-using Managers;
+﻿using Managers;
 using UnityEngine;
 
 namespace Data
@@ -7,6 +6,9 @@ namespace Data
     [CreateAssetMenu(fileName = "LevelData", menuName = "Data/LevelData")]
     public class LevelData : ScriptableObject
     {
+        [Header("Level Data")]
+        public int timerInSeconds;
+        
         [Header("Task Briefing")]
         public string briefingText;
         
@@ -20,5 +22,10 @@ namespace Data
         public float colorChangeSpeed;
         public Color32 defaultColor;
         public Color32 dangerColor;
+        
+        [Header("Level Skybox")]
+        public Material skyboxMat;
+        public readonly int CubemapTransition = Shader.PropertyToID("_CubemapTransition");
+
     }
 }

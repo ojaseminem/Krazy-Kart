@@ -21,8 +21,8 @@ namespace Player
         {
             //Spawn Item based on item type
 
-            StartCoroutine(Util.WaitUntilRoutine(() => !GameManager.instance.sentenceManager.checkForInput, Spawn));
-
+            StartCoroutine(Util.WaitUntilRoutine(() => !GameManager.Instance.sentenceManager.checkForInput, Spawn));
+            
             void Spawn()
             {
                 var currItem = Instantiate(itemHolder.item, itemsParent);
@@ -62,20 +62,22 @@ namespace Player
                     {
                         previousHj.autoConfigureConnectedAnchor = true;
                     }
-                }               
+                }
+                
+                GameManager.Instance.ChangeState(GameState.Playing);
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            var canDetect = GameManager.instance.playerManager.player.canMove;
+            var canDetect = GameManager.Instance.playerManager.player.canMove;
             
             if(!canDetect) return;
             
             if (other.CompareTag("Task"))
             {
                 _cart.BrakeCart();
-                GameManager.instance.ChangeState(GameState.Task);
+                GameManager.Instance.ChangeState(GameState.Task);
 
                 var itemHolder = (ItemHolder)other.GetComponentInParent(typeof(ItemHolder));
                 
@@ -87,6 +89,14 @@ namespace Player
             }
             
             if (other.CompareTag("Store")) PlayerManager.EnteredStore(other.GetComponent<StoreController>().currStoreType);
+
+            if (other.CompareTag("SpeedUp"))
+            {
+                var dir = Vector3.Normalize(other.transform.position - transform.position);
+                var dot = Vector3.Dot(other.transform.forward, dir);
+                
+                if(dot > .3f) _cart.SpeedUp();
+            }
         }
 
         private void OnTriggerExit(Collider other)

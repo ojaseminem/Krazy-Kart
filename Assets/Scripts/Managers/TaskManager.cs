@@ -6,13 +6,13 @@ namespace Managers
     {
         public void InitTaskBriefing(ItemType itemType)
         {
-            var briefingText = GameManager.instance.levelData.briefingText;
+            var briefingText = GameManager.Instance.levelData.briefingText;
             
             FinalizeBriefing(briefingText, itemType);
 
-            var briefingWindow = GameManager.instance.uiManager.briefingWindow;
+            var briefingWindow = GameManager.Instance.uiManager.briefingWindow;
             
-            var ld = GameManager.instance.levelData;
+            var ld = GameManager.Instance.levelData;
             
             var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
             taskText.text = FinalizeBriefing(ld.briefingText, itemType);
