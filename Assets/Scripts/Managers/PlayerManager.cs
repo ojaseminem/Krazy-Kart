@@ -9,6 +9,8 @@ namespace Managers
 
         public void SetPlayerMove(bool toggle) => player.canMove = toggle;
 
+        public void GameOver() => player.GameOverSpeedUp();
+
         public static void EnteredStore(StoreType storeType) => GameManager.Instance.storeManager.CheckStore(storeType);
 
         public static void ExitedStore() => GameManager.Instance.storeManager.indicate = false;

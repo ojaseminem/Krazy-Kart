@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Managers;
 using UnityEngine;
 using Utils;
 
@@ -11,12 +12,16 @@ namespace Player.ShoppingCart
         public float rotateSpeed = 30;
         public float maxAngle = 30;
         public float maxTorque = 300;
-        public float defaultSpeedTorque = 1;
+        [SerializeField] private float defaultSpeedTorque = 1;
         private float _speedUpTorque = 1;
-        public float maxSpeedUpTorque = 3;
-        public float speedUpTime = 4f;
-        public float initialSpeedHoldTime = 1f;
+        [SerializeField] private float maxSpeedUpTorque = 3;
+        [SerializeField] private float defaultSpeedHoldTime = 1f;
+        [SerializeField] private float speedUpTime = 4f;
+        [SerializeField] private float boostForce = 100f;
+        [SerializeField] private ForceMode forceMode;
         public GameObject wheelShape;
+
+        [SerializeField] private Transform itemsParent;
 
         public bool canMove;
 
@@ -211,13 +216,14 @@ namespace Player.ShoppingCart
 
         public void SpeedUp()
         {
+            _rigid.AddForce(transform.forward * boostForce, forceMode);
             StartCoroutine(Speeding());
             IEnumerator Speeding()
             {
                 var elapsedTime = 0f;
                 _speedUpTorque = maxSpeedUpTorque;
                 
-                yield return new WaitForSeconds(initialSpeedHoldTime);
+                yield return new WaitForSeconds(defaultSpeedHoldTime);
                 
                 while (elapsedTime < speedUpTime)
                 {
@@ -228,6 +234,19 @@ namespace Player.ShoppingCart
                     yield return null;
                 }
             }
+        }
+
+        public void GameOverSpeedUp()
+        {
+            SpeedUp();
+            
+            if(itemsParent.childCount > 0) itemsParent.GetChild(0).GetComponent<Rigidbody>().isKinematic = false;
+
+            var hj = itemsParent.GetComponentsInChildren<HingeJoint>();
+            if(hj != null) foreach (var joint in hj) Destroy(joint);
+            
+            var col = itemsParent.GetComponentsInChildren<BoxCollider>();
+            if(col != null) foreach (var boxCollider in col) boxCollider.isTrigger = false;
         }
         
         public void SetLeftRight(int value) => _leftOrRight = value;

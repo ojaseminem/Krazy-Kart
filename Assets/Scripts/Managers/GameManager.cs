@@ -49,6 +49,9 @@ namespace Managers
                     //FindObjectOfType<PlayerController>().canMove = false;
                     //StartCoroutine(onScoreCalculation());
                     break;
+                case GameState.GameOver:
+                    GameOver();
+                    break;
             }
         }
 
@@ -108,8 +111,15 @@ namespace Managers
             calculateScore = false;
             if (ScoreManager.currentScore == ScoreManager.totalScore) ChangeState(GameState.Win);
         }*/
-    
 
+        private void GameOver()
+        {
+            uiManager.CloseWindow(Windows.Task);
+            uiManager.CloseWindow(Windows.GameUi);
+            uiManager.InitializeWindow(Windows.GameOver);
+            playerManager.SetPlayerMove(false);
+            playerManager.GameOver();
+        }
     }
 }
 

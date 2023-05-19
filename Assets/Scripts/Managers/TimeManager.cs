@@ -31,6 +31,7 @@ namespace Managers
             
             //Countdown finished
             text.text = "CountDown Finished";
+            GameManager.Instance.ChangeState(GameState.GameOver);
         }
     }
 }

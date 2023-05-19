@@ -11,7 +11,8 @@
         Briefing,
         Playing,
         Task,
-        ScoreCalculation
+        ScoreCalculation,
+        GameOver,
     }
 
     public enum LevelDifficulty
@@ -27,6 +28,7 @@
         Briefing,
         GameUi,
         Task,
+        GameOver,
     }
 
     public enum ItemType

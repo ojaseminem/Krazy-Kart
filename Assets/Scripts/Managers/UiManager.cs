@@ -9,6 +9,7 @@ namespace Managers
         public BriefingWindow briefingWindow;
         public GameUiWindow gameUiWindow;
         public TaskWindow taskWindow;
+        public GameOverWindow gameOverWindow;
 
         public void InitializeWindow(Windows window)
         {
@@ -22,6 +23,9 @@ namespace Managers
                     break;
                 case Windows.Task:
                     taskWindow.window.SetActive(true);
+                    break;
+                case Windows.GameOver:
+                    gameOverWindow.window.SetActive(true);
                     break;
             }
         }
@@ -38,6 +42,9 @@ namespace Managers
                     break;
                 case Windows.Task:
                     taskWindow.window.SetActive(false);
+                    break;
+                case Windows.GameOver:
+                    gameOverWindow.window.SetActive(false);
                     break;
             }
         }
@@ -64,4 +71,10 @@ public struct TaskWindow
 {
     public GameObject window;
     public TextMeshProUGUI taskText;
+}
+
+[Serializable]
+public struct GameOverWindow
+{
+    public GameObject window;
 }
