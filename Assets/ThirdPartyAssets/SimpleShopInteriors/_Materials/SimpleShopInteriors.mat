@@ -187,7 +187,7 @@ Material:
     - _Farthest_Distance: 100
     - _GI_Intensity: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0
+    - _Glossiness: 0.321
     - _GlossyReflections: 1
     - _HighColor_Power: 0
     - _Inverse_Clipping: 0
@@ -225,7 +225,7 @@ Material:
     - _Is_ViewShift: 0
     - _LightDirection_MaskOn: 0
     - _MatCap: 0
-    - _Metallic: 0
+    - _Metallic: 0.473
     - _Mode: 0
     - _Nearest_Distance: 0.5
     - _OUTLINE: 0
@@ -300,3 +300,4 @@ Material:
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColMult: {r: 0, g: 0, b: 0, a: 1}
     - _ViewShift: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

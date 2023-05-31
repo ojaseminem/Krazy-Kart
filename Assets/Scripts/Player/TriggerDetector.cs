@@ -17,15 +17,16 @@ namespace Player
 
         private void Start() => _cart = GetComponent<ShoppingCartDrive>();
 
-        private void SpawnTasksInCart(ItemHolder itemHolder)
+        private void SpawnTasksInCart()
         {
             //Spawn Item based on item type
 
-            StartCoroutine(Util.WaitUntilRoutine(() => !GameManager.Instance.sentenceManager.checkForInput, Spawn));
+            StartCoroutine(Util.WaitUntilRoutine(() => GameManager.Instance.taskManager.taskCompleted, Spawn));
             
             void Spawn()
             {
-                var currItem = Instantiate(itemHolder.item, itemsParent);
+                var itemData = GameManager.Instance.itemData;
+                var currItem = Instantiate(itemData.currItem, itemsParent);
                 _itemsInCart.Add(currItem);
 
                 var currIndex = _itemsInCart.FindIndex(item => item == currItem);
@@ -77,18 +78,25 @@ namespace Player
             if (other.CompareTag("Task"))
             {
                 _cart.BrakeCart();
-                GameManager.Instance.ChangeState(GameState.Task);
 
                 var itemHolder = (ItemHolder)other.GetComponentInParent(typeof(ItemHolder));
-                
+
+                GameManager.Instance.itemData.currItem = itemHolder.item;
                 itemHolder.zone.SetActive(false);
                 
-                SpawnTasksInCart(itemHolder);
+                GameManager.Instance.ChangeState(GameState.Task);
+
+                SpawnTasksInCart();
 
                 other.GetComponent<BoxCollider>().enabled = false;
             }
             
-            if (other.CompareTag("Store")) PlayerManager.EnteredStore(other.GetComponent<StoreController>().currStoreType);
+            if (other.CompareTag("Store"))
+            {
+                var currStore = other.GetComponent<StoreController>().currStoreType;
+                GameManager.Instance.itemData.currStore = currStore; 
+                PlayerManager.EnteredStore(currStore);
+            }
 
             if (other.CompareTag("SpeedUp"))
             {
@@ -101,7 +109,10 @@ namespace Player
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Store")) PlayerManager.ExitedStore();
+            if (other.CompareTag("Store"))
+            {
+                PlayerManager.ExitedStore();
+            }
         }
     }
 }

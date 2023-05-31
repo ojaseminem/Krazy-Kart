@@ -8,7 +8,7 @@ namespace Managers
 {
     public class SentenceManager : MonoBehaviour
     {
-        public bool checkForInput;
+        private bool checkForInput;
         public TextMeshProUGUI sentenceOutput;
     
         [HideInInspector] public string currentSentence;

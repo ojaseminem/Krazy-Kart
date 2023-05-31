@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Ads;
+using Data;
 using UnityEngine;
 using Utils;
 
@@ -23,9 +24,14 @@ namespace Managers
         public NpcManager npcManager;
         public StoreManager storeManager;
 
+        [Header("Ads")]
+        public AdsManager adsManager;
+        public AdsInitializer adsInitializer;
+
         [Header("Data")] 
         public LevelData levelData;
         public ItemData itemData;
+        public AdsData adsData;
 
         private void Start() => ChangeState(GameState.PreRequisites);
 
@@ -61,6 +67,8 @@ namespace Managers
             
             levelData.skyboxMat.SetFloat(levelData.CubemapTransition, 0f);
             
+            adsInitializer.InitializeAds(adsData);
+            
             ChangeState(GameState.Briefing);
         }
 
@@ -91,7 +99,8 @@ namespace Managers
         {
             playerManager.SetPlayerMove(false);
 
-            sentenceManager.SetCurrentSentence();
+            taskManager.InitMidTask();
+            //sentenceManager.SetCurrentSentence();
         }
         
         /*IEnumerator onScoreCalculation()
@@ -114,8 +123,7 @@ namespace Managers
 
         private void GameOver()
         {
-            uiManager.CloseWindow(Windows.Task);
-            uiManager.CloseWindow(Windows.GameUi);
+            adsManager.LoadAd(AdsType.Rewarded);
             uiManager.InitializeWindow(Windows.GameOver);
             playerManager.SetPlayerMove(false);
             playerManager.GameOver();

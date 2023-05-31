@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Items;
+using Managers;
 using UnityEngine;
 
 namespace Data
@@ -10,7 +11,7 @@ namespace Data
         [Header("Item Data")] 
         public const int TotalNumOfItems = 7;
         
-        [Header("ItemHolders")]
+        [Header("Item Holders")]
         public ItemHolder[] itemHolders;
 
         [Header("Items")]
@@ -23,5 +24,9 @@ namespace Data
         public List<Item> bakery;
 
         public List<Item> spawnedItems = new List<Item>();
+
+        [Header("Gameplay Variables")]
+        public Item currItem;
+        public StoreType currStore;
     }
 }

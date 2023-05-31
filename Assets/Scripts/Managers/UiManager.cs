@@ -23,6 +23,7 @@ namespace Managers
                     break;
                 case Windows.Task:
                     taskWindow.window.SetActive(true);
+                    taskWindow.layoutGroup.gameObject.SetActive(true);
                     break;
                 case Windows.GameOver:
                     gameOverWindow.window.SetActive(true);
@@ -42,6 +43,7 @@ namespace Managers
                     break;
                 case Windows.Task:
                     taskWindow.window.SetActive(false);
+                    taskWindow.layoutGroup.gameObject.SetActive(false);
                     break;
                 case Windows.GameOver:
                     gameOverWindow.window.SetActive(false);
@@ -71,6 +73,7 @@ public struct TaskWindow
 {
     public GameObject window;
     public TextMeshProUGUI taskText;
+    public LayoutGroup3D layoutGroup;
 }
 
 [Serializable]

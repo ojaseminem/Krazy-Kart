@@ -74,4 +74,11 @@
         Clothing,
         Bakery
     }
+
+    public enum AdsType
+    {
+        Interstitial,
+        Rewarded,
+        Banner
+    }
 }
