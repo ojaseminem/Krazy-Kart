@@ -15,11 +15,23 @@
         GameOver,
     }
 
+    public enum TaskState
+    {
+        PreTask,
+        PostTask
+    }
+
     public enum LevelDifficulty
     {
         Easy,
         Average,
         Hard
+    }
+
+    public enum EconomyType
+    {
+        Coin,
+        Token
     }
 
     //UI
@@ -29,6 +41,11 @@
         GameUi,
         Task,
         GameOver,
+    }
+
+    public enum Popups
+    {
+        ObjectSelectionConfirmation
     }
 
     public enum ItemType

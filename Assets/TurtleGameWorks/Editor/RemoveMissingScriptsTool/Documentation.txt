@@ -1,0 +1,67 @@
+﻿##############################
+##############################
+
+Remove Missing Scripts Tool
+
+Description:
+
+The "Remove Missing Scripts Tool" is a Unity editor extension developed by Turtle Game Works.
+It allows you to remove missing scripts from multiple prefabs at once, saving you time and effort in maintaining your project.
+
+Features:
+
+    1. Drag and drop prefabs directly into the tool.
+    2. Automatically detects and removes missing scripts from the selected prefabs.
+    3. Provides a list of the selected prefabs.
+    4. Logs warnings and success messages in the Unity console for feedback.
+
+Installation:
+
+To install the "Remove Missing Scripts Tool" in your Unity project, follow these steps:
+
+    Open your Unity project.
+    Navigate to the "Window" menu in the Unity Editor.
+    Select "Package Manager" to open the Package Manager window.
+    Search for "Remove Missing Scripts Tool"
+    Click on "Download" and then on "Import" to import the tool.
+    Wait for Unity to download and import the package.
+    Once the process is complete, you can start using the "Remove Missing Scripts Tool."
+
+Usage:
+
+To use the "Remove Missing Scripts Tool" in Unity, follow these steps:
+
+    Open your Unity project.
+    Navigate to the "Tools" menu in the Unity Editor.
+    Select "Remove Missing Scripts" to open the tool's window.
+    In the tool's window, you will see a "Drag and drop prefabs here:" section.
+    Drag and drop the prefabs you want to process into the designated area.
+    The tool will display the list of selected prefabs for verification.
+    Click the "Remove Missing Scripts" button to initiate the removal process.
+    The tool will iterate through the selected prefabs and remove any missing scripts it finds.
+    
+    The button "Remove All Missing Scripts from Scene" will automatically remove all missing scripts from the currently open scene/s.
+    It will not be dependent on any prefabs added in the tool window.
+    Warnings and success messages will be logged in the Unity console.
+
+Support:
+
+If you encounter any issues or have suggestions for improvement, you can reach out to Turtle Game Works through our official email or contact our support team as well through the same email.
+
+License:
+
+The "Remove Missing Scripts Tool" is licensed under the MIT License. You can find the full license text in the repository of the tool.
+
+Acknowledgments:
+
+Turtle Game Works would like to thank the Unity community for their support and feedback in the development of this tool.
+
+Contact:
+
+Email-ID :- turtlegameworks@gmail.com
+Instagram :- instagram.com/turtlegameworks
+LinkTree :- https://linktr.ee/turtlegameworks
+Gumroad :- https://ojassharma3.gumroad.com/l/yivyw
+
+##############################
+##############################

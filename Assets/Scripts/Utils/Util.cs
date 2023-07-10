@@ -21,5 +21,7 @@ namespace Utils
             yield return new WaitUntil(condition);
             callback?.Invoke();
         }
+
+        public static string SpritesPath = "TaskSprites/";
     }
 }

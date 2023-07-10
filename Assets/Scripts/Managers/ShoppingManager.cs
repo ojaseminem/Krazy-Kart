@@ -73,6 +73,7 @@ namespace Managers
 
         private void SpawnItemHolders(List<Item> itemList)
         {
+            if(itemList.Count == 0) return;
             var rand = Random.Range(0, itemList.Count);
 
             var currentItem = itemList[rand];

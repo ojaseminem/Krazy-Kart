@@ -1,11 +1,14 @@
 ﻿using System;
+using Data;
 using TMPro;
+using UI;
 using UnityEngine;
 
 namespace Managers
 {
     public class UiManager : MonoBehaviour
     {
+        [Header("Windows Data")]
         public BriefingWindow briefingWindow;
         public GameUiWindow gameUiWindow;
         public TaskWindow taskWindow;
@@ -23,7 +26,6 @@ namespace Managers
                     break;
                 case Windows.Task:
                     taskWindow.window.SetActive(true);
-                    taskWindow.layoutGroup.gameObject.SetActive(true);
                     break;
                 case Windows.GameOver:
                     gameOverWindow.window.SetActive(true);
@@ -42,8 +44,8 @@ namespace Managers
                     gameUiWindow.window.SetActive(false);
                     break;
                 case Windows.Task:
+                    if(!GameManager.Instance.taskManager.taskCompleted) return;
                     taskWindow.window.SetActive(false);
-                    taskWindow.layoutGroup.gameObject.SetActive(false);
                     break;
                 case Windows.GameOver:
                     gameOverWindow.window.SetActive(false);
@@ -73,7 +75,7 @@ public struct TaskWindow
 {
     public GameObject window;
     public TextMeshProUGUI taskText;
-    public LayoutGroup3D layoutGroup;
+    public TaskSlotsController taskSlotsController;
 }
 
 [Serializable]

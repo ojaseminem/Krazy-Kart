@@ -1,0 +1,142 @@
+﻿-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Capture Screenshot Tool - Documentation
+
+-----------------------------------------------------------------------------
+
+Table of Contents
+
+1. Introduction
+2. Installation
+3. Tool Description
+4. How to Use
+5. Customization
+6. Troubleshooting
+7. Conclusion
+
+-----------------------------------------------------------------------------
+
+Introduction
+
+The Capture Screenshot Tool is a Unity Editor extension developed by Turtle Game Works.
+This tool provides a convenient way to capture screenshots within the Unity Editor with customizable settings.
+It allows you to define a specific folder path to save the screenshots and provides a default path as well.
+
+-----------------------------------------------------------------------------
+
+Installation
+
+To install the Capture Screenshot Tool, follow these steps:
+1. Open your Unity project.
+2. Go to the project's Assets folder.
+3. Create a new folder (if not already present) and name it "Editor" (without quotes).
+4. Open the "Editor" folder.
+5. Create a new C# script file in the "Editor" folder.
+6. Copy the provided code into the script file.
+7. Save the script file with an appropriate name, such as "CaptureScreenshotTool.cs".
+8. Unity will automatically compile the script and make the tool available within the Unity Editor.
+
+-----------------------------------------------------------------------------
+
+Tool Description
+
+The Capture Screenshot Tool is comprised of two parts: the screenshot capture logic and the settings provider.
+
+
+Screenshot Capture Logic
+
+The `CaptureScreenshotTool` class contains the core logic for capturing screenshots.
+It provides a menu item that can be accessed through "TurtleGameWorks/Capture Screenshot" or by pressing the assigned shortcut key (F11 by default).
+When triggered, the tool captures a screenshot of the Game view and saves it as a PNG file.
+
+The captured screenshot file is named in the following format: `<ProductName>_<DateTime>.png`.
+The `<ProductName>` is the name of your Unity project, and `<DateTime>` represents the date and time when the screenshot was taken (in the format "yyyymmddhhmmss").
+
+By default, the tool saves the captured screenshots to a specified path. If the path is not set or is empty, it falls back to a default path located in the user's "Screenshots" folder.
+
+
+Settings Provider
+
+The `CaptureScreenshotSettingsProvider` class is responsible for providing a custom settings interface within the Unity Editor.
+It allows users to configure the screenshot capture path and provides a button to reset the path to the default value.
+
+The settings interface can be accessed through "Edit/Project Settings/TurtleGameWorks/Capture Screenshot" or by searching for "Capture Screenshot" in the Unity Editor's search bar.
+Within the settings interface, you can specify a custom folder path or use the default path for saving screenshots.
+
+-----------------------------------------------------------------------------
+
+How to Use
+
+To use the Capture Screenshot Tool in Unity, follow these steps:
+
+
+Capturing a Screenshot
+
+1. Open your Unity project.
+2. Make sure the Game view is visible and focused.
+3. Either navigate to "TurtleGameWorks/Capture Screenshot" in the Unity Editor's menu or press the assigned shortcut key (F11 by default).
+4. The tool will capture a screenshot of the Game view and save it to the specified or default folder path.
+5. The file will be named in the format `<ProductName>_<DateTime>.png`.
+6. The file path where the screenshot is saved will be displayed in the Unity Console.
+
+
+Changing the Screenshot Path
+
+1. Open your Unity project.
+2. Go to "Edit/Project Settings/TurtleGameWorks/Capture Screenshot" or search for "Capture Screenshot" in the Unity Editor's search bar.
+3. In the settings interface, you will see a text field labeled "Screenshot Path".
+4. Enter a custom folder path where you want to save the screenshots.
+5. Press Enter to apply the new path.
+6. The tool will save future screenshots to the specified folder path.
+
+
+Resetting to Default Path
+
+1. Open your Unity project.
+2. Go to "Edit/Project Settings/TurtleGameWorks/Capture Screenshot" or search for "Capture Screenshot" in the Unity Editor's search bar.
+3. In the settings interface, you will see a button labeled "Reset to Default".
+4. Click the "Reset to Default" button to reset the screenshot path to the default value.
+5. The default path is located in the user's "Screenshots" folder.
+
+-----------------------------------------------------------------------------
+
+Customization
+
+The Capture Screenshot Tool allows for customization of the following aspects:
+
+-----------------------------------------------------------------------------
+
+Shortcut Key
+
+By default, the tool is set to use the F11 key as the shortcut for capturing a screenshot.
+However, you can modify the shortcut key by changing the `[MenuItem(KMenuPath + " _F11")]` attribute in the code.
+Replace `" _F11"` with the desired key combination. For example, use `" %#F11"` for the Ctrl + F11 combination.
+
+
+Default Screenshot Path
+
+The tool provides a default screenshot path located in the user's "Screenshots" folder.
+If you prefer a different default path, you can modify it by changing the `GetDefaultPath()` method in the code.
+Update the `defaultPath` variable to the desired default folder path.
+
+-----------------------------------------------------------------------------
+
+Troubleshooting
+
+If you encounter any issues while using the Capture Screenshot Tool, consider the following troubleshooting steps:
+
+1. Ensure that the Capture Screenshot Tool script is placed in the "Editor" folder within your Unity project's Assets folder.
+2. Check that the Unity Editor is in Play mode or Game view is visible and focused before capturing a screenshot.
+3. Verify that the specified or default folder path for saving screenshots is valid and accessible.
+4. Make sure you have sufficient permissions to create and write files in the specified folder path.
+
+If the issue persists, you can seek further assistance from the Turtle Game Works support team or consult the Unity forums for additional guidance.
+
+-----------------------------------------------------------------------------
+
+Conclusion
+
+The Capture Screenshot Tool developed by Turtle Game Works provides a convenient way to capture screenshots within the Unity Editor.
+It offers customizable settings for specifying the screenshot path and allows users to capture screenshots with a single click or shortcut key.
+With this tool, you can easily document and share your Unity project's visual assets. You can also use it to screenshot gameplay visuals.

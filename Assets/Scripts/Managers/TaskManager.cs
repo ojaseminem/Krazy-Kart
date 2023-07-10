@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Items;
 using UnityEngine;
@@ -61,21 +60,36 @@ namespace Managers
         }
 
         public bool taskCompleted;
-        private Item _currItem;
-        private List<Item> _uniqueItemsList = new List<Item>();
+        
         private TaskWindow _taskWindow;
-
-        private int _randomItemCount;
+        private List<Item> _uniqueItemsList = new List<Item>();
         private List<Item> _randomItemsList = new List<Item>();
-
         private int _objectsLayer;
 
-        public void InitMidTask()
+        public void ChangeTaskState(TaskState taskState)
         {
-            GameManager.Instance.uiManager.InitializeWindow(Windows.Task);
+            switch (taskState)
+            {
+                case TaskState.PreTask:
+                    PreTask();
+                    break;
+                case TaskState.PostTask:
+                    PostTask();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(taskState), taskState, null);
+            }
+        }
+
+        private void PreTask()
+        {
+            #region PreRequisites
+
             var itemData = GameManager.Instance.itemData;
             _taskWindow = GameManager.Instance.uiManager.taskWindow;
-
+            
+            #endregion
+            
             switch (itemData.currStore)
             {
                 case StoreType.Groceries:
@@ -102,55 +116,53 @@ namespace Managers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
+            
             var spawnOrder = Random.Range(1, 4);
-            
-            _objectsLayer = LayerMask.NameToLayer("UIObjects");
-            
-            _randomItemCount = Mathf.Min(_uniqueItemsList.Count, 2);
-            _randomItemsList = _uniqueItemsList.FindAll(item => item != _currItem);
+
+            _randomItemsList = _uniqueItemsList.FindAll(item => item.itemType != itemData.currItem.itemType);
             
             switch (spawnOrder)
             {
                 case 1:
-                    _currItem = Instantiate(itemData.currItem, _taskWindow.layoutGroup.transform);
-                    SpawnRandomItem();
-                    SpawnRandomItem();
+                    _taskWindow.taskSlotsController.SpawnItem(itemData.currItem, 1);
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 2);
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 3);
                     break;
                 case 2:
-                    SpawnRandomItem();
-                    SpawnRandomItem();
-                    _currItem = Instantiate(itemData.currItem, _taskWindow.layoutGroup.transform);
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 1);
+                    _taskWindow.taskSlotsController.SpawnItem(itemData.currItem, 2);
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 3);
                     break;
                 case 3:
-                    SpawnRandomItem();
-                    _currItem = Instantiate(itemData.currItem, _taskWindow.layoutGroup.transform);
-                    SpawnRandomItem();
-                    break;
-                default:
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 1);
+                    _taskWindow.taskSlotsController.SpawnItem(RandomItem(), 2);
+                    _taskWindow.taskSlotsController.SpawnItem(itemData.currItem, 3);
                     break;
             }
 
-            _currItem.gameObject.layer = _objectsLayer;
-
-            _taskWindow.layoutGroup.RebuildLayout();
-            
-            _currItem.SpawnedForSelection();
-            
             _uniqueItemsList.Clear();
+
+            Item RandomItem()
+            {
+                if (_randomItemsList.Count == 0) return null;
+
+                var randomItem = _randomItemsList[Random.Range(0, _randomItemsList.Count)];
+                _randomItemsList.Remove(randomItem);
+                
+                return randomItem;
+            }
         }
         
-        private void SpawnRandomItem()
+        private void PostTask()
         {
-            if (_randomItemsList.Count == 0) return;
+            Debug.Log("Post Task");
+            GameManager.Instance.uiManager.CloseWindow(Windows.Task);
+            GameManager.Instance.ChangeState(GameState.Playing);
+        }
 
-            var spawnedRandomItem = Instantiate(_randomItemsList[Random.Range(0, _randomItemsList.Count)],
-                _taskWindow.layoutGroup.transform);
-
-            spawnedRandomItem.SpawnedForSelection();
-            spawnedRandomItem.gameObject.layer = _objectsLayer;
-
-            _randomItemsList.Remove(spawnedRandomItem);
+        public void MiniTaskAnimationCompleted()
+        {
+            //Instantiate Popup
         }
     }
 }

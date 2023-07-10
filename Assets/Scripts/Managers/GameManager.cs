@@ -1,6 +1,7 @@
 ﻿using Ads;
 using Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 
 namespace Managers
@@ -17,11 +18,13 @@ namespace Managers
         [Header("Managers")]
         public PlayerManager playerManager;
         public UiManager uiManager;
-        public SentenceManager sentenceManager;
         public ShoppingManager shoppingManager;
         public TaskManager taskManager;
         public TimeManager timeManager;
         public NpcManager npcManager;
+        public EconomyManager economyManager;
+        
+        [Header("External Managers")]
         public StoreManager storeManager;
 
         [Header("Ads")]
@@ -32,8 +35,17 @@ namespace Managers
         public LevelData levelData;
         public ItemData itemData;
         public AdsData adsData;
+        public UIData uiData;
+        public EconomyData economyData;
 
-        private void Start() => ChangeState(GameState.PreRequisites);
+        private void Start()
+        {
+            //Move to Loading
+            SceneManager.LoadSceneAsync("EnvironmentScene", LoadSceneMode.Additive);
+            
+            Application.targetFrameRate = 60;
+            ChangeState(GameState.PreRequisites);
+        }
 
         public void ChangeState(GameState state)
         {
@@ -66,7 +78,8 @@ namespace Managers
             itemData.spawnedItems.Clear();
             
             levelData.skyboxMat.SetFloat(levelData.CubemapTransition, 0f);
-            
+
+            economyManager.Init(economyData);
             adsInitializer.InitializeAds(adsData);
             
             ChangeState(GameState.Briefing);
@@ -99,8 +112,8 @@ namespace Managers
         {
             playerManager.SetPlayerMove(false);
 
-            taskManager.InitMidTask();
-            //sentenceManager.SetCurrentSentence();
+            uiManager.InitializeWindow(Windows.Task);
+            taskManager.ChangeTaskState(TaskState.PreTask);
         }
         
         /*IEnumerator onScoreCalculation()
@@ -133,4 +146,3 @@ namespace Managers
 
 //Todo Win a prize bonus game
 //Todo Vending machine bonus game
-//Todo Hard level riddle based word generation

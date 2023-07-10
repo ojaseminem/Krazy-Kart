@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Data;
 using Misc;
@@ -14,6 +15,9 @@ namespace Managers
         public bool indicate;
 
         private LevelData _levelData;
+
+        private void Awake() => GameManager.Instance.storeManager = this;
+
         private void Start() => _levelData = GameManager.Instance.levelData;
 
         public void CheckStore(StoreType storeType)
