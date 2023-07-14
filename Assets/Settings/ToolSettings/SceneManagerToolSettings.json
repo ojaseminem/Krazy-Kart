@@ -1,0 +1,19 @@
+{
+  "sceneInputs": [
+    {
+      "customName": "Gameplay Scene",
+      "loadAdditive": false,
+      "scenePath": "Assets/Scenes/GameplayScene.unity"
+    },
+    {
+      "customName": "Environment Scene",
+      "loadAdditive": false,
+      "scenePath": "Assets/Scenes/EnvironmentScene.unity"
+    },
+    {
+      "customName": "Menu Scene",
+      "loadAdditive": false,
+      "scenePath": "Assets/Scenes/MenuScene.unity"
+    }
+  ]
+}

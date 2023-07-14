@@ -35,7 +35,6 @@ namespace Managers
         public LevelData levelData;
         public ItemData itemData;
         public AdsData adsData;
-        public UIData uiData;
         public EconomyData economyData;
 
         private void Start()
@@ -113,7 +112,8 @@ namespace Managers
             playerManager.SetPlayerMove(false);
 
             uiManager.InitializeWindow(Windows.Task);
-            taskManager.ChangeTaskState(TaskState.PreTask);
+            
+            //taskManager.ChangeTaskState(TaskState.PreTask);
         }
         
         /*IEnumerator onScoreCalculation()
