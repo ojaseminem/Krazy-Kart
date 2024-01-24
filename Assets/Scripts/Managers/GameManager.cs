@@ -39,10 +39,7 @@ namespace Managers
 
         private void Start()
         {
-            //Move to Loading
-            SceneManager.LoadSceneAsync("EnvironmentScene", LoadSceneMode.Additive);
-            
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
             ChangeState(GameState.PreRequisites);
         }
 
@@ -74,6 +71,8 @@ namespace Managers
 
         private void PreRequisites()
         {
+            SceneManager.LoadSceneAsync("EnvironmentScene", LoadSceneMode.Additive);
+
             itemData.spawnedItems.Clear();
             
             levelData.skyboxMat.SetFloat(levelData.CubemapTransition, 0f);
