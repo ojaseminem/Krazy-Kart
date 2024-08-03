@@ -4,7 +4,7 @@ using UnityEngine.Advertisements;
 
 namespace Ads
 {
-    public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener
+    public class AdsInitializer : MonoBehaviour
     {
         private string _gameId;
 
@@ -18,20 +18,20 @@ namespace Ads
 #endif
             //Add for iOS when we start iOS
 
-            if (!Advertisement.isInitialized && Advertisement.isSupported)
+            /*if (!Advertisement.isInitialized && Advertisement.isSupported)
             {
                 Advertisement.Initialize(_gameId, adsData.testMode, this);
-            }
+            }*/
         }
 
-        public void OnInitializationComplete()
+        /*public void OnInitializationComplete()
         {
             Debug.Log("Unity Ads initialization complete.");
-        }
+        }*/
 
-        public void OnInitializationFailed(UnityAdsInitializationError error, string message)
+        /*public void OnInitializationFailed(UnityAdsInitializationError error, string message)
         {
             Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
-        }
+        }*/
     }
 }

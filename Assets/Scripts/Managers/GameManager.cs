@@ -19,6 +19,7 @@ namespace Managers
         public PlayerManager playerManager;
         public UiManager uiManager;
         public ShoppingManager shoppingManager;
+        public SentenceManager sentenceManager;
         public TaskManager taskManager;
         public TimeManager timeManager;
         public NpcManager npcManager;
@@ -112,7 +113,7 @@ namespace Managers
 
             uiManager.InitializeWindow(Windows.Task);
             
-            //taskManager.ChangeTaskState(TaskState.PreTask);
+            taskManager.ChangeTaskState(TaskState.PreTask);
         }
         
         /*IEnumerator onScoreCalculation()

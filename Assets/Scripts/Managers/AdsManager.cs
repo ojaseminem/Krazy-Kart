@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Managers
 {
-    public class AdsManager : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
+    public class AdsManager : MonoBehaviour
     {
         [SerializeField] private Button watchAdsButton;
         private string _adUnitId;
@@ -28,7 +28,7 @@ namespace Managers
             };
 
             Debug.Log("Loading Ad: " + _adUnitId);
-            Advertisement.Load(_adUnitId, this);
+            //Advertisement.Load(_adUnitId, this);
         }
 
         public void ShowAd()
@@ -39,7 +39,7 @@ namespace Managers
                 watchAdsButton.onClick.RemoveAllListeners();
             }
             Debug.Log("Showing Ad: " + _adUnitId);
-            Advertisement.Show(_adUnitId, this);
+            //Advertisement.Show(_adUnitId, this);
         }
 
         public void OnUnityAdsAdLoaded(string adUnitId)
@@ -53,7 +53,7 @@ namespace Managers
             }
         }
 
-        public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
+        /*public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
         {
             Debug.Log($"Error Loading Ad Unity: {adUnitId} - {error.ToString()} - {message}");
         }
@@ -73,6 +73,6 @@ namespace Managers
                 Debug.Log("Unity Ads Rewarded Ad Completed");
                 //Grant Rewards
             }
-        }
+        }*/
     }
 }

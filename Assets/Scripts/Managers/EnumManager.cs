@@ -18,6 +18,7 @@
     public enum TaskState
     {
         PreTask,
+        MidTask,
         PostTask
     }
 

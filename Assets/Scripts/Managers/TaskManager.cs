@@ -65,7 +65,6 @@ namespace Managers
         
         private TaskWindow _taskWindow;
         private List<Item> _uniqueItemsList = new List<Item>();
-        private List<Item> _randomItemsList = new List<Item>();
         private int _objectsLayer;
 
         public void ChangeTaskState(TaskState taskState)
@@ -74,6 +73,9 @@ namespace Managers
             {
                 case TaskState.PreTask:
                     PreTask();
+                    break;
+                case TaskState.MidTask:
+                    MidTask();
                     break;
                 case TaskState.PostTask:
                     PostTask();
@@ -85,12 +87,8 @@ namespace Managers
 
         private void PreTask()
         {
-            #region PreRequisites
-
             var itemData = GameManager.Instance.itemData;
             _taskWindow = GameManager.Instance.uiManager.taskWindow;
-            
-            #endregion
             
             switch (itemData.currStore)
             {
@@ -119,7 +117,9 @@ namespace Managers
                     throw new ArgumentOutOfRangeException();
             }
             
-            var spawnOrder = Random.Range(1, 4);
+            ChangeTaskState(TaskState.MidTask);
+            
+            /*var spawnOrder = Random.Range(1, 4);
 
             _randomItemsList = _uniqueItemsList.FindAll(item => item.itemType != itemData.currItem.itemType);
             
@@ -152,7 +152,12 @@ namespace Managers
                 _randomItemsList.Remove(randomItem);
                 
                 return randomItem;
-            }
+            }*/
+        }
+        
+        private void MidTask()
+        {
+            GameManager.Instance.sentenceManager.SetCurrentSentence();
         }
         
         private void PostTask()
@@ -165,87 +170,6 @@ namespace Managers
         public void MiniTaskAnimationCompleted()
         {
             //Instantiate Popup
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        public bool checkForInput;
-        public TextMeshProUGUI sentenceOutput;
-    
-        [HideInInspector] public string currentSentence;
-    
-        private UiManager _uiManager;
-        private string _remainingSentence;
-
-        private void Start()
-        {
-            _uiManager = GameManager.Instance.uiManager;
-            sentenceOutput = _uiManager.taskWindow.taskText;
-        }
-
-        private void Update()
-        {
-            if (!checkForInput) return;
-            CheckInput();
-        }
-
-        public void SetCurrentSentence()
-        {
-            checkForInput = true;
-            currentSentence = RandomSentence();
-        
-            _uiManager.InitializeWindow(Windows.Task);
-        
-            SetRemainingSentence(currentSentence);
-        }
-
-        private void SetRemainingSentence(string newString)
-        {
-            _remainingSentence = newString;
-            sentenceOutput.text = _remainingSentence;
-        }
-
-        private void CheckInput()
-        {
-            if (!Input.anyKeyDown) return;
-        
-            string keysPressed = Input.inputString;
-            if (keysPressed.Length == 1) EnterLetter(keysPressed);
-        }
-    
-        private void EnterLetter(string typedLetter)
-        {
-            if (!IsCorrectLetter(typedLetter)) return;
-            RemoveLetter();
-
-            if (!IsSentenceComplete()) return;
-            checkForInput = false;
-        
-            _uiManager.CloseWindow(Windows.Task);
-            GameManager.Instance.ChangeState(GameState.Playing);
-        }
-    
-        private bool IsCorrectLetter(string letter) => _remainingSentence.IndexOf(letter, StringComparison.Ordinal) == 0;
-
-        private void RemoveLetter()
-        {
-            string newString = _remainingSentence.Remove(0, 1);
-            SetRemainingSentence(newString);
-        }
-
-        private bool IsSentenceComplete() => _remainingSentence.Length == 0;
-
-        private string RandomSentence()
-        {
-            int randomSentenceIndex = Random.Range(0, JsonReader.GetSentenceBank().Length);
-            string randomSentence = JsonReader.GetSentenceBank()[randomSentenceIndex];
-
-            return randomSentence;
         }
     }
 }

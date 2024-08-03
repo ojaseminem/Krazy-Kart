@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.unity.ads": {
-      "version": "4.4.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.ai.navigation": {
       "version": "2.0.0",
       "depth": 0,
@@ -173,6 +164,15 @@
       "dependencies": {
         "com.unity.services.authentication": "2.0.0",
         "com.unity.services.core": "1.11.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.services.levelplay": {
+      "version": "8.2.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.services.core": "1.8.1"
       },
       "url": "https://packages.unity.com"
     },

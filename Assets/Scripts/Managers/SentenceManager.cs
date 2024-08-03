@@ -8,13 +8,15 @@ namespace Managers
 {
     public class SentenceManager : MonoBehaviour
     {
-        private bool checkForInput;
+        private bool _checkForInput;
         public TextMeshProUGUI sentenceOutput;
     
         [HideInInspector] public string currentSentence;
     
         private UiManager _uiManager;
         private string _remainingSentence;
+
+        #region Private
 
         private void Start()
         {
@@ -24,18 +26,8 @@ namespace Managers
 
         private void Update()
         {
-            if (!checkForInput) return;
+            if (!_checkForInput) return;
             CheckInput();
-        }
-
-        public void SetCurrentSentence()
-        {
-            checkForInput = true;
-            currentSentence = RandomSentence();
-        
-            _uiManager.InitializeWindow(Windows.Task);
-        
-            SetRemainingSentence(currentSentence);
         }
 
         private void SetRemainingSentence(string newString)
@@ -59,7 +51,7 @@ namespace Managers
             RemoveLetter();
 
             if (!IsSentenceComplete()) return;
-            checkForInput = false;
+            _checkForInput = false;
         
             _uiManager.CloseWindow(Windows.Task);
             GameManager.Instance.ChangeState(GameState.Playing);
@@ -82,5 +74,21 @@ namespace Managers
 
             return randomSentence;
         }
+
+        #endregion
+
+        #region Public
+
+        public void SetCurrentSentence()
+        {
+            _checkForInput = true;
+            currentSentence = RandomSentence();
+        
+            _uiManager.InitializeWindow(Windows.Task);
+        
+            SetRemainingSentence(currentSentence);
+        }
+
+        #endregion
     }
 }
