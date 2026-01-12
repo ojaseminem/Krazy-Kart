@@ -51,7 +51,7 @@ namespace Player
         private void Move()
         {
             _rb.MovePosition(
-                transform.position + (transform.forward * _input.normalized.magnitude) * speed * Time.deltaTime);
+                transform.position + transform.forward * (_input.normalized.magnitude * speed * Time.deltaTime));
         }
 
         private void OnTriggerEnter(Collider other)

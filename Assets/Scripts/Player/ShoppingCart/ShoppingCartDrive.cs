@@ -32,11 +32,17 @@ namespace Player.ShoppingCart
         private Rigidbody _rigid;
 
         private int _leftOrRight;
-        
+
+#if UNITY_ANDROID
         private float angle => maxAngle * (Input.GetAxis("Horizontal") + CustomInput.HorizontalInput);
-
         private float torque => maxTorque * (Input.GetAxis("Vertical") + CustomInput.VerticalInput);
+#endif
 
+#if UNITY_STANDALONE_WIN
+        private float angle => maxAngle * Input.GetAxis("Horizontal");
+        private float torque => maxTorque * Input.GetAxis("Vertical");
+#endif
+        
         private bool _isEmitting = false;
 
         private void Start()
@@ -108,8 +114,10 @@ namespace Player.ShoppingCart
             if (!canMove) return;
 
             AdjustCamera();
-            
+
+#if UNITY_ANDROID
             HandleMovement();
+#endif
 
             WheelMovement();
             
@@ -145,10 +153,10 @@ namespace Player.ShoppingCart
         private void AdjustCamera()
         {
 #if UNITY_EDITOR
-            var x = Input.GetAxis("Horizontal");
+            /*var x = Input.GetAxis("Horizontal");
             if (Mathf.Abs(x - 1) < .1f) cam.ToggleCameraDirection(1);
             else if (Mathf.Abs(x + 1) < .1f) cam.ToggleCameraDirection(2);
-            else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(0);
+            else if (Mathf.Abs(x) < .1f) cam.ToggleCameraDirection(0);*/
             //if (Math.Abs(CustomInput.VerticalInput - (-1)) < .2f) cam.ToggleCameraDirection(3);
 #endif
 
