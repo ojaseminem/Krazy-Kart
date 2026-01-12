@@ -131,7 +131,7 @@ namespace TurtleGameWorks.Editor.RemoveMissingScriptsTool
         
         private void RemoveAllMissingScriptsFromScene()
         {
-            var gameObjects = FindObjectsOfType<GameObject>();
+            var gameObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
 
             foreach (var gameObject in gameObjects)
             {
