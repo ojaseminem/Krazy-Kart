@@ -19,6 +19,11 @@
       "customName": "Loading Scene",
       "loadAdditive": false,
       "scenePath": "Assets/Scenes/LoadingScene.unity"
+    },
+    {
+      "customName": "Test Scene",
+      "loadAdditive": false,
+      "scenePath": "Assets/Scenes/Test.unity"
     }
   ]
 }
