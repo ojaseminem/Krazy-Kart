@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Player.ShoppingCart
+namespace Kart
 {
-	public class EasySuspension : MonoBehaviour {
+	public class KartSuspension : MonoBehaviour {
 		[Range(0, 20)]
 		public float naturalFrequency = 10;
 		[Range(0, 3)]

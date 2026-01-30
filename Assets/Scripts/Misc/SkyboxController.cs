@@ -11,7 +11,7 @@ namespace Misc
 
         public static IEnumerator SkyboxCountDown(float startValue = 0f, float endValue = 0f, bool perform = false, float duration = 0, Action callback = null)
         {
-            var levelData = GameManager.Instance.levelData;
+            var levelData = RunManager.Instance.levelData;
             if(!perform) yield break;
             
             var elapsedTime = 0f;

@@ -4,6 +4,7 @@ using UnityEngine.Advertisements;
 
 namespace Ads
 {
+    // Will need it to integrate Ads for Mobile platform
     public class AdsInitializer : MonoBehaviour
     {
         private string _gameId;

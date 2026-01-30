@@ -12,7 +12,7 @@ namespace Managers
         private IEnumerator CountDown(float seconds)
         {
             var time = seconds;
-            var text = GameManager.Instance.uiManager.gameUiWindow.countDownText;
+            var text = RunManager.Instance.uiManager.gameUiWindow.countDownText;
             
             while (time > 0)
             {
@@ -31,7 +31,7 @@ namespace Managers
             
             //Countdown finished
             text.text = "CountDown Finished";
-            GameManager.Instance.ChangeState(GameState.GameOver);
+            RunManager.Instance.ChangeState(GameState.GameOver);
         }
     }
 }

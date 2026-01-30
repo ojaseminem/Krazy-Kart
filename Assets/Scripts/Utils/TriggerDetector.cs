@@ -1,31 +1,31 @@
 ﻿using System.Collections.Generic;
 using Items;
+using Kart;
 using Managers;
-using Player.ShoppingCart;
 using Store;
 using UnityEngine;
 using Utils;
 
-namespace Player
+namespace Kart
 {
     public class TriggerDetector : MonoBehaviour
     {
         [SerializeField] private Transform itemsParent;
 
         private List<Item> _itemsInCart = new List<Item>();
-        private ShoppingCartDrive _cart;
+        private KartController _cart;
 
-        private void Start() => _cart = GetComponent<ShoppingCartDrive>();
+        private void Start() => _cart = GetComponent<KartController>();
 
         private void SpawnTasksInCart()
         {
             //Spawn Item based on item type
 
-            StartCoroutine(Util.WaitUntilRoutine(() => GameManager.Instance.taskManager.taskCompleted, Spawn));
+            // StartCoroutine(Util.WaitUntilRoutine(() => RunManager.Instance.taskManager.taskCompleted, Spawn));
             
             void Spawn()
             {
-                var itemData = GameManager.Instance.itemData;
+                var itemData = RunManager.Instance.itemData;
                 var currItem = Instantiate(itemData.currItem, itemsParent);
                 _itemsInCart.Add(currItem);
 
@@ -65,13 +65,13 @@ namespace Player
                     }
                 }
                 
-                GameManager.Instance.ChangeState(GameState.Playing);
+                RunManager.Instance.ChangeState(GameState.Playing);
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        /*private void OnTriggerEnter(Collider other)
         {
-            var canDetect = GameManager.Instance.playerManager.player.canMove;
+            var canDetect = RunManager.Instance.playerManager.player.canMove;
             
             if(!canDetect) return;
             
@@ -81,10 +81,10 @@ namespace Player
 
                 var itemHolder = (ItemHolder)other.GetComponentInParent(typeof(ItemHolder));
 
-                GameManager.Instance.itemData.currItem = itemHolder.item;
+                RunManager.Instance.itemData.currItem = itemHolder.item;
                 itemHolder.zone.SetActive(false);
                 
-                GameManager.Instance.ChangeState(GameState.Task);
+                RunManager.Instance.ChangeState(GameState.Task);
 
                 SpawnTasksInCart();
 
@@ -94,7 +94,7 @@ namespace Player
             if (other.CompareTag("Store"))
             {
                 var currStore = other.GetComponent<StoreController>().currStoreType;
-                GameManager.Instance.itemData.currStore = currStore; 
+                RunManager.Instance.itemData.currStore = currStore; 
                 PlayerManager.EnteredStore(currStore);
             }
 
@@ -113,6 +113,6 @@ namespace Player
             {
                 PlayerManager.ExitedStore();
             }
-        }
+        }*/
     }
 }

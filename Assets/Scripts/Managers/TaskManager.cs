@@ -10,15 +10,15 @@ namespace Managers
 {
     public class TaskManager : MonoBehaviour
     {
-        public void InitTaskBriefing(ItemType itemType)
+        /*public void InitTaskBriefing(ItemType itemType)
         {
-            var briefingText = GameManager.Instance.levelData.briefingText;
+            var briefingText = RunManager.Instance.levelData.briefingText;
 
             FinalizeBriefing(briefingText, itemType);
 
-            var briefingWindow = GameManager.Instance.uiManager.briefingWindow;
+            var briefingWindow = RunManager.Instance.uiManager.briefingWindow;
 
-            var ld = GameManager.Instance.levelData;
+            var ld = RunManager.Instance.levelData;
 
             var taskText = Instantiate(briefingWindow.taskTextPrefab, briefingWindow.taskParent);
             taskText.text = FinalizeBriefing(ld.briefingText, itemType);
@@ -49,7 +49,7 @@ namespace Managers
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }*/
+            }#1#
         }
 
         private string FinalizeBriefing(string briefValue, ItemType itemName)
@@ -87,8 +87,8 @@ namespace Managers
 
         private void PreTask()
         {
-            var itemData = GameManager.Instance.itemData;
-            _taskWindow = GameManager.Instance.uiManager.taskWindow;
+            var itemData = RunManager.Instance.itemData;
+            _taskWindow = RunManager.Instance.uiManager.taskWindow;
             
             switch (itemData.currStore)
             {
@@ -152,7 +152,7 @@ namespace Managers
                 _randomItemsList.Remove(randomItem);
                 
                 return randomItem;
-            }*/
+            }#1#
         }
         
         private void MidTask()
@@ -170,6 +170,6 @@ namespace Managers
         public void MiniTaskAnimationCompleted()
         {
             //Instantiate Popup
-        }
+        }*/
     }
 }

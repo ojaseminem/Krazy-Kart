@@ -12,8 +12,9 @@ namespace Data
         [Header("Item Data")] 
         public const int TotalNumOfItems = 7;
         
+        /*
         [Header("Item Holders")]
-        public ItemHolder[] itemHolders;
+        public ItemHolder[] itemHolders;*/
 
         [Header("Items")]
         public List<Item> groceries;

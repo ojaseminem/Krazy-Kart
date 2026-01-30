@@ -1,7 +1,7 @@
 ﻿using Cinemachine;
 using UnityEngine;
 
-namespace Player
+namespace Kart
 {
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class CameraController : MonoBehaviour
@@ -53,10 +53,10 @@ namespace Player
 
             HandleDynamicCamera();
             ApplyBoostAndDriftEffects();
-            ApplyLookInput();
+            // ApplyLookInput(); - Removed Mouse Input for Cam
         }
 
-        #region Core Follow & Tilt
+        #region Follow & Tilt
         private void HandleDynamicCamera()
         {
             // Adjust distance based on speed
@@ -79,14 +79,14 @@ namespace Player
         }
         #endregion
 
-        #region Look Input
-        private void ApplyLookInput()
+        #region Look Input - Not needed anymore. Removing Mouse input for Cam control
+        /*private void ApplyLookInput()
         {
             // Rotate camera around kart based on look input
             Vector3 right = _target.right;
             Vector3 up = Vector3.up;
             mainCam.transform.position += right * _inputHandler.lookInput.x * 0.5f + up * _inputHandler.lookInput.y * 0.2f;
-        }
+        }*/
         #endregion
 
         #region Boost and Drift Effects

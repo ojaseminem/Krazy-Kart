@@ -16,7 +16,7 @@ namespace Managers
 
         public void LoadAd(AdsType adsType)
         {
-            _adsData = GameManager.Instance.adsData;
+            _adsData = RunManager.Instance.adsData;
             _adsType = adsType;
             
             _adUnitId = _adsType switch

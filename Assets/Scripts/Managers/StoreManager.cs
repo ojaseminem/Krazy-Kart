@@ -16,9 +16,9 @@ namespace Managers
 
         private LevelData _levelData;
 
-        private void Awake() => GameManager.Instance.storeManager = this;
+        private void Awake() => RunManager.Instance.storeManager = this;
 
-        private void Start() => _levelData = GameManager.Instance.levelData;
+        private void Start() => _levelData = RunManager.Instance.levelData;
 
         public void CheckStore(StoreType storeType)
         {

@@ -18,7 +18,7 @@ namespace UI
 
         [SerializeField] private GameObject blocker;
         
-        private GameManager _gameManager;
+        private RunManager _runManager;
 
         private bool _accepted;
 
@@ -27,7 +27,7 @@ namespace UI
             AppearAction += Appear;
             DisappearAction += Disappear;
             
-            _gameManager = GameManager.Instance;
+            _runManager = RunManager.Instance;
         }
 
         private void Appear() => blocker.SetActive(false);
@@ -51,7 +51,7 @@ namespace UI
         private void CallAccept()
         {
             //_gameManager.economyManager.Spend(EconomyType.Coin, itemPrice);
-            _gameManager.taskManager.taskCompleted = true;
+            // _runManager.taskManager.taskCompleted = true;
             _accepted = true;
             OnClose();
             ClearListeners();
@@ -77,7 +77,7 @@ namespace UI
             if (_accepted)
             {
                 print("Confirm Buy");
-                _gameManager.taskManager.ChangeTaskState(TaskState.PostTask);
+                // _runManager.taskManager.ChangeTaskState(TaskState.PostTask);
             }
             base.OnDisappear();
         }

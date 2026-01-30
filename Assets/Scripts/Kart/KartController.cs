@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Player
+namespace Kart
 {
     public class KartController : MonoBehaviour
     {
@@ -165,6 +165,24 @@ namespace Player
             // Example: shoot a projectile / apply effect
             Debug.Log("Fire Action Triggered!");
         }
+        #endregion
+
+        #region Game Over Boost
+
+        public void GameOverBoost()
+        {
+            SpeedUp();
+            
+            if(itemsParent.childCount > 0) itemsParent.GetChild(0).GetComponent<Rigidbody>().isKinematic = false;
+
+            var hj = itemsParent.GetComponentsInChildren<HingeJoint>();
+            if(hj != null) foreach (var joint in hj) Destroy(joint);
+            
+            var col = itemsParent.GetComponentsInChildren<BoxCollider>();
+            if (col == null) return;
+            foreach (var boxCollider in col) boxCollider.isTrigger = false;
+        }
+
         #endregion
 
         #region Brake

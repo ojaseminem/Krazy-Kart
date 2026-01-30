@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Managers
 {
+    // TODO: Redo this for actual intended MartManager
     public class ShoppingManager : MonoBehaviour
     {
         private LevelData _levelData;
@@ -80,10 +81,10 @@ namespace Managers
 
             if (HasCurrentItemSpawnedAlready(currentItem)) return;
 
-            ItemSpawner.instance.SpawnItemHolders(currentItem);
+            // ItemSpawner.instance.SpawnItemHolders(currentItem);
 
             //Brief the player about the task
-            GameManager.Instance.taskManager.InitTaskBriefing(currentItem.itemType);
+            // RunManager.Instance.taskManager.InitTaskBriefing(currentItem.itemType);
 
             _itemData.spawnedItems.Add(currentItem);
         }

@@ -108,13 +108,13 @@ namespace Fade
             var wait = new WaitForSeconds(waitTime);
             var ticks = 1;
 
-            if (fadingObject.materials[0].HasProperty("_Color"))
+            if (fadingObject.materials[0].HasProperty($"_Color"))
             {
                 while (fadingObject.materials[0].color.a < fadingObject.initialAlpha)
                 {
                     foreach (var material in fadingObject.materials)
                     {
-                        if (material.HasProperty("_Color"))
+                        if (material.HasProperty($"_Color"))
                         {
                             material.color = new Color(
                                 material.color.r,
@@ -159,7 +159,7 @@ namespace Fade
                 i.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
             }
 
-            if (fadingObject.materials[0].HasProperty("_Color"))
+            if (fadingObject.materials[0].HasProperty($"_Color"))
             {
                 while (fadingObject.materials[0].color.a > fadedAlpha)
                 {

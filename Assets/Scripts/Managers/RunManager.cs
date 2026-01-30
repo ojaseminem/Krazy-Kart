@@ -6,20 +6,18 @@ using Utils;
 
 namespace Managers
 {
-    public class GameManager : MonoBehaviour
+    public class RunManager : MonoBehaviour
     {
         #region Singleton
 
-        public static GameManager Instance;
+        public static RunManager Instance;
         private void Awake() => Instance = this;
 
         #endregion
 
         [Header("Managers")]
-        public PlayerManager playerManager;
         public UiManager uiManager;
         public ShoppingManager shoppingManager;
-        public SentenceManager sentenceManager;
         public TaskManager taskManager;
         public TimeManager timeManager;
         public NpcManager npcManager;
@@ -88,7 +86,7 @@ namespace Managers
         {
             shoppingManager.InitShopping(levelData, itemData);
 
-            playerManager.SetPlayerMove(false);
+            // TODO: playerManager.SetPlayerMove(false); 
             
             uiManager.InitializeWindow(Windows.Briefing);
             
@@ -102,18 +100,18 @@ namespace Managers
 
         private void Playing()
         {
-            playerManager.SetPlayerMove(true);
+            // TODO: playerManager.SetPlayerMove(true);
 
             uiManager.InitializeWindow(Windows.GameUi);
         }
     
         private void Task()
         {
-            playerManager.SetPlayerMove(false);
+            // TODO: playerManager.SetPlayerMove(false);
 
             uiManager.InitializeWindow(Windows.Task);
             
-            taskManager.ChangeTaskState(TaskState.PreTask);
+            // taskManager.ChangeTaskState(TaskState.PreTask);
         }
         
         /*IEnumerator onScoreCalculation()
@@ -138,8 +136,8 @@ namespace Managers
         {
             adsManager.LoadAd(AdsType.Rewarded);
             uiManager.InitializeWindow(Windows.GameOver);
-            playerManager.SetPlayerMove(false);
-            playerManager.GameOver();
+            // TODO: playerManager.SetPlayerMove(false);
+            // TODO: playerManager.GameOver();
         }
     }
 }

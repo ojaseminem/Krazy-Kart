@@ -44,7 +44,7 @@ namespace Managers
                     gameUiWindow.window.SetActive(false);
                     break;
                 case Windows.Task:
-                    if(!GameManager.Instance.taskManager.taskCompleted) return;
+                    // if(!RunManager.Instance.taskManager.taskCompleted) return;
                     taskWindow.window.SetActive(false);
                     break;
                 case Windows.GameOver:

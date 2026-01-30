@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Player
+namespace Kart
 {
     public class KartInput : MonoBehaviour
     {

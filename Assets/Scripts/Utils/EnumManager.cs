@@ -49,39 +49,6 @@
         ObjectSelectionConfirmation
     }
 
-    public enum ItemType
-    {
-        Bananas,
-        Watermelon,
-        Pear,
-        Pineapple,
-        Eggs,
-        Ketchup,
-        MilkBottles,
-        WineBottles,
-        Pickle,
-        Colgate,
-        ChewingGum,
-        Cornflakes,
-        Meat,
-        ChickToy,
-        StuffedToy,
-        Headphones,
-        Boots,
-        Cake,
-        Cookies,
-        FoodTray,
-        NeckPiece,
-        Pant,
-        Pastries,
-        Rings,
-        Shoes,
-        Slippers,
-        Shirt,
-        Watches,
-        WaterBottles,
-    }
-
     public enum StoreType
     {
         Groceries,
