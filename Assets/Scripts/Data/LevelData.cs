@@ -1,4 +1,6 @@
-﻿using Managers;
+﻿using System.Collections.Generic;
+using Mall;
+using Managers;
 using UnityEngine;
 
 namespace Data
@@ -26,6 +28,10 @@ namespace Data
         [Header("Level Skybox")]
         public Material skyboxMat;
         public readonly int CubemapTransition = Shader.PropertyToID("_CubemapTransition");
-
+        
+        
+        
+        [Header("Floor Controllers")]
+        public FloorController[] floorControllers;
     }
 }

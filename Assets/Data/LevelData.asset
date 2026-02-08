@@ -26,3 +26,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4278190335
   skyboxMat: {fileID: 2100000, guid: 1cf6f4c6e6e0518419839d3f5448dd99, type: 2}
+  floorControllers:
+  - {fileID: 4107214415739390846, guid: 1492a733536a5d945b42729efda0dbbf, type: 3}
+  - {fileID: 4107214415739390846, guid: 1492a733536a5d945b42729efda0dbbf, type: 3}
+  - {fileID: 4107214415739390846, guid: 1492a733536a5d945b42729efda0dbbf, type: 3}

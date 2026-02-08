@@ -15,6 +15,22 @@
         GameOver,
     }
 
+    public enum MallState
+    {
+        Empty,
+        Constructing,
+        Transitioning,
+        ReachedManagerFloor,
+        Deconstructing
+    }
+
+    public enum FloorTriggerType
+    {
+        PassThrough,
+        EntryTrigger,
+        ExitTrigger
+    }
+
     public enum TaskState
     {
         PreTask,

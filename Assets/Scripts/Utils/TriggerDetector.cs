@@ -2,11 +2,9 @@
 using Items;
 using Kart;
 using Managers;
-using Store;
 using UnityEngine;
-using Utils;
 
-namespace Kart
+namespace Utils
 {
     public class TriggerDetector : MonoBehaviour
     {
@@ -22,7 +20,9 @@ namespace Kart
             //Spawn Item based on item type
 
             // StartCoroutine(Util.WaitUntilRoutine(() => RunManager.Instance.taskManager.taskCompleted, Spawn));
-            
+            Spawn();
+            return;
+
             void Spawn()
             {
                 var itemData = RunManager.Instance.itemData;
