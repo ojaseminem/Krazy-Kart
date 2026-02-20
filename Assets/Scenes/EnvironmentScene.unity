@@ -32228,7 +32228,7 @@ Rigidbody:
   m_GameObject: {fileID: 750644704106105056}
   serializedVersion: 5
   m_Mass: 20
-  m_LinearDamping: 0
+  m_LinearDamping: 1
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -32243,7 +32243,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!1 &750644704314899888
@@ -33716,7 +33716,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 2.79, y: 1.178, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 750644704880171855}
   - {fileID: 4646064645108769538}
@@ -33752,7 +33752,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 1.5, z: 0.5}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1793501335693518315
 MonoBehaviour:
@@ -33777,7 +33777,7 @@ MonoBehaviour:
   maxSpeedUpTorque: 3
   speedUpTime: 4
   boostForce: 100
-  forceMode: 0
+  forceMode: 5
   canMove: 1
 --- !u!114 &1793501335693518316
 MonoBehaviour:
