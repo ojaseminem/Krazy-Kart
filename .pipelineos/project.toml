@@ -1,0 +1,18 @@
+schema_version = 1
+name = "Krazy Kart"
+project_type = "game-development"
+launch_profiles = []
+shortcuts = []
+enabled_health_checks = [
+    "project-path",
+    "linked-apps",
+]
+
+[[linked_apps]]
+app_id = "unity"
+preferred_version = "6000.4.8"
+folder = "."
+
+[[linked_apps]]
+app_id = "maya"
+folder = "_Resources"
