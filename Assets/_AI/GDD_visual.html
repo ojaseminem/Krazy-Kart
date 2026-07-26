@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRAZY KART — Game Design Document v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFE600;
+    --orange: #FF5A00;
+    --red: #FF1A1A;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --mid: #1A1A1A;
+    --panel: #1E1E1E;
+    --border: #2A2A2A;
+    --white: #F5F5F0;
+    --muted: #888880;
+    --green: #00FF88;
+    --blue: #00AAFF;
+    --pink: #FF3399;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* ─── TICKER TAPE ────────────────────────────────── */
+  .ticker {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--orange);
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 30s linear infinite;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── HERO ───────────────────────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 60px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,230,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,230,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,90,0,0.15) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,230,0,0.08) 0%, transparent 70%);
+    bottom: 50px;
+    left: 100px;
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.88;
+    color: var(--yellow);
+    text-shadow:
+      4px 4px 0 var(--orange),
+      8px 8px 0 rgba(255,90,0,0.3);
+    letter-spacing: -2px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-title span { color: var(--white); }
+
+  .hero-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(15px, 2vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 24px;
+    max-width: 560px;
+    line-height: 1.5;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item { }
+  .hero-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+  .hero-meta-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--yellow);
+    letter-spacing: 0.05em;
+  }
+
+  .hero-pill-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    padding: 6px 16px;
+    border-radius: 2px;
+  }
+  .pill-outline { border: 1px solid var(--border); color: var(--muted); }
+  .pill-yellow { background: var(--yellow); color: var(--black); }
+  .pill-orange { background: var(--orange); color: var(--white); }
+  .pill-red { background: var(--red); color: var(--white); }
+
+  /* ─── LAYOUT ─────────────────────────────────────── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  /* ─── SECTION ────────────────────────────────────── */
+  .section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+  .section-title .accent { color: var(--yellow); }
+
+  /* ─── VISION BLOCK ───────────────────────────────── */
+  .vision-quote {
+    border-left: 3px solid var(--yellow);
+    padding: 20px 28px;
+    background: var(--panel);
+    margin: 32px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .vision-quote p {
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+  .vision-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    font-style: normal;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+
+  .tone-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 32px 0;
+    border: 1px solid var(--border);
+  }
+  .tone-cell {
+    background: var(--panel);
+    padding: 24px 20px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .tone-cell:hover { background: var(--mid); }
+  .tone-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .tone-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+  }
+  .tone-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ─── CORE LOOP ──────────────────────────────────── */
+  .loop-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 32px 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .loop-step {
+    flex: 1;
+    min-width: 130px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .loop-step:hover { background: var(--mid); border-color: var(--yellow); }
+  .loop-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--orange);
+    font-size: 20px;
+    z-index: 2;
+    font-family: 'Bebas Neue', sans-serif;
+  }
+  .loop-step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: rgba(255,230,0,0.15);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .loop-step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+    margin-bottom: 6px;
+  }
+  .loop-step-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ─── DIFFICULTY ─────────────────────────────────── */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .diff-card {
+    background: var(--panel);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .diff-card:hover { background: var(--mid); }
+  .diff-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+  .diff-card.rush::before { background: var(--green); }
+  .diff-card.destroy::before { background: var(--red); }
+  .diff-card.style::before { background: var(--yellow); }
+  .diff-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    margin-bottom: 10px;
+  }
+  .diff-card.rush .diff-tag { color: var(--green); }
+  .diff-card.destroy .diff-tag { color: var(--red); }
+  .diff-card.style .diff-tag { color: var(--yellow); }
+  .diff-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 24px;
+    margin-bottom: 14px;
+    color: var(--white);
+  }
+  .diff-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .diff-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .diff-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+  .diff-stat-label { color: var(--muted); }
+  .diff-bar-wrap { width: 80px; height: 4px; background: var(--border); border-radius: 2px; }
+  .diff-bar { height: 100%; border-radius: 2px; }
+
+  /* ─── MC TABLE ───────────────────────────────────── */
+  .mc-table-wrap {
+    margin: 32px 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .mc-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .mc-table th {
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    padding: 12px 20px;
+    text-align: left;
+  }
+  .mc-table td {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .mc-table tr:hover td { background: var(--panel); }
+  .mc-table tr:last-child td { border-bottom: none; }
+  .mc-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--yellow);
+    letter-spacing: 0.05em;
+  }
+  .mc-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--orange);
+  }
+  .mc-bar-cell { width: 200px; }
+  .mc-bar-outer { background: var(--border); height: 6px; border-radius: 3px; }
+  .mc-bar-inner { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+
+  /* ─── FLOORS ─────────────────────────────────────── */
+  .floors-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .floor-card {
+    background: var(--panel);
+    padding: 0;
+    overflow: hidden;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .floor-card:hover { background: var(--mid); }
+  .floor-header-strip {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .floor-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .floor-name {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.1;
+    color: var(--white);
+  }
+  .floor-theme {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .floor-body { padding: 16px 20px; }
+  .floor-mc {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .floor-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .floor-tag {
+    font-size: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.15em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid;
+  }
+  .tag-flow { color: var(--blue); border-color: var(--blue); }
+  .tag-destroy { color: var(--red); border-color: var(--red); }
+  .tag-stunt { color: var(--pink); border-color: var(--pink); }
+  .tag-npc { color: var(--orange); border-color: var(--orange); }
+  .tag-cop { color: var(--red); border-color: var(--red); background: rgba(255,26,26,0.08); }
+  .tag-physics { color: var(--green); border-color: var(--green); }
+  .floor-accent-bar { height: 3px; }
+
+  /* ─── SCORING ────────────────────────────────────── */
+  .scoring-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel);
+    padding: 16px 20px;
+    transition: background 0.15s;
+  }
+  .score-row:hover { background: var(--mid); }
+  .score-action {
+    font-size: 14px;
+    color: var(--white);
+    font-weight: 500;
+  }
+  .score-reward {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--yellow);
+  }
+  .score-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  /* ─── COP SYSTEM ─────────────────────────────────── */
+  .cop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .cop-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+  .cop-panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+  .cop-panel.threat .cop-panel-title { color: var(--red); }
+  .cop-panel.escape .cop-panel-title { color: var(--green); }
+  .cop-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .cop-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .cop-list li::before {
+    content: '▸';
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .cop-panel.threat .cop-list li::before { color: var(--red); }
+  .cop-panel.escape .cop-list li::before { color: var(--green); }
+
+  /* ─── BOSS FLOOR ─────────────────────────────────── */
+  .boss-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    padding: 40px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .boss-section::before {
+    content: 'BOSS';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 80px;
+    color: rgba(255,26,26,0.05);
+    letter-spacing: -2px;
+    pointer-events: none;
+  }
+  .boss-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 32px;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .boss-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .boss-phases {
+    display: flex;
+    gap: 2px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+  .boss-phase {
+    flex: 1;
+    background: var(--dark);
+    padding: 16px 14px;
+    border-top: 2px solid;
+    transition: background 0.2s;
+  }
+  .boss-phase:hover { background: var(--mid); }
+  .boss-phase:nth-child(1) { border-color: var(--green); }
+  .boss-phase:nth-child(2) { border-color: var(--yellow); }
+  .boss-phase:nth-child(3) { border-color: var(--orange); }
+  .boss-phase:nth-child(4) { border-color: var(--red); }
+  .boss-phase-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .boss-phase-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .boss-phase-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── LEADERBOARD ────────────────────────────────── */
+  .lb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .lb-card {
+    background: var(--panel);
+    padding: 20px 18px;
+    transition: background 0.2s;
+  }
+  .lb-card:hover { background: var(--mid); }
+  .lb-icon { font-size: 22px; margin-bottom: 8px; }
+  .lb-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--yellow);
+    margin-bottom: 4px;
+  }
+  .lb-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── ART & TECH ─────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .infoblock {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+  .infoblock-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .infoblock ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .infoblock li {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .infoblock li::before { content: '—'; color: var(--yellow); flex-shrink: 0; }
+
+  /* ─── OPEN VARIABLES ─────────────────────────────── */
+  .vars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .var-cell {
+    background: var(--panel);
+    padding: 20px 16px;
+    transition: background 0.2s;
+    border-top: 2px solid var(--border);
+  }
+  .var-cell:hover { background: var(--mid); border-top-color: var(--yellow); }
+  .var-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .var-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--yellow);
+    margin-bottom: 4px;
+  }
+  .var-note { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── TRANSITION MODULE ──────────────────────────── */
+  .transition-strip {
+    background: linear-gradient(135deg, var(--panel) 0%, var(--dark) 100%);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    padding: 28px 32px;
+    margin: 32px 0;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .transition-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+  .transition-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .transition-desc {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 360px;
+    line-height: 1.6;
+  }
+  .transition-themes { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .transition-theme {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .theme-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-brand {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 28px;
+    color: var(--yellow);
+    text-shadow: 2px 2px 0 var(--orange);
+  }
+  .footer-info {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── NAV ────────────────────────────────────────── */
+  nav {
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 60px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    position: sticky;
+    top: 38px;
+    z-index: 99;
+    overflow-x: auto;
+  }
+  nav a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: var(--yellow); }
+  .nav-brand {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 16px;
+    color: var(--yellow);
+    margin-right: 16px;
+    text-shadow: 1px 1px 0 var(--orange);
+    flex-shrink: 0;
+  }
+  .nav-sep { color: var(--border); flex-shrink: 0; }
+
+  /* ─── ENTRY ANIMATION ────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow { animation: fadeUp 0.6s ease both; }
+  .hero-title { animation: fadeUp 0.6s ease 0.1s both; }
+  .hero-sub { animation: fadeUp 0.6s ease 0.2s both; }
+  .hero-meta { animation: fadeUp 0.6s ease 0.3s both; }
+  .hero-pill-row { animation: fadeUp 0.6s ease 0.4s both; }
+
+  /* ─── VERTICALITY DIAGRAM ────────────────────────── */
+  .vert-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+  .vert-floor {
+    display: flex;
+    align-items: stretch;
+    background: var(--panel);
+    transition: background 0.2s;
+    min-height: 60px;
+  }
+  .vert-floor:hover { background: var(--mid); }
+  .vert-floor-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 12px 8px;
+    min-width: 36px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    background: var(--dark);
+    flex-shrink: 0;
+  }
+  .vert-floor-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+  .vert-floor-name {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 15px;
+    color: var(--white);
+    min-width: 160px;
+  }
+  .vert-features { display: flex; gap: 8px; flex-wrap: wrap; }
+  .vert-feature {
+    font-size: 11px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 2px;
+  }
+  .vert-mc {
+    margin-left: auto;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--yellow);
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* ─── CALLOUT ────────────────────────────────────── */
+  .callout {
+    background: rgba(255,230,0,0.05);
+    border: 1px solid rgba(255,230,0,0.2);
+    border-radius: 2px;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--yellow); }
+
+  /* ─── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 768px) {
+    .hero, .section, footer { padding-left: 24px; padding-right: 24px; }
+    nav { padding-left: 24px; padding-right: 24px; }
+    .tone-grid { grid-template-columns: repeat(2, 1fr); }
+    .diff-grid { grid-template-columns: 1fr; }
+    .floors-scroll { grid-template-columns: 1fr 1fr; }
+    .scoring-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .vars-grid { grid-template-columns: repeat(2, 1fr); }
+    .lb-grid { grid-template-columns: 1fr 1fr; }
+    .boss-phases { flex-wrap: wrap; }
+    .cop-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    KRAZY KART &nbsp;✦&nbsp; GAME DESIGN DOCUMENT v1.0 &nbsp;✦&nbsp; MALL ASCENT RUNNER &nbsp;✦&nbsp; PHYSICS CHAOS &nbsp;✦&nbsp; STYLISH DESTRUCTION &nbsp;✦&nbsp; MALL CREDIT SYSTEM &nbsp;✦&nbsp; BOSS ESCAPE SEQUENCE &nbsp;✦&nbsp; KRAZY KART &nbsp;✦&nbsp; GAME DESIGN DOCUMENT v1.0 &nbsp;✦&nbsp; MALL ASCENT RUNNER &nbsp;✦&nbsp; PHYSICS CHAOS &nbsp;✦&nbsp; STYLISH DESTRUCTION &nbsp;✦&nbsp; MALL CREDIT SYSTEM &nbsp;✦&nbsp; BOSS ESCAPE SEQUENCE &nbsp;✦&nbsp; KRAZY KART &nbsp;✦&nbsp; GAME DESIGN DOCUMENT v1.0 &nbsp;✦&nbsp; MALL ASCENT RUNNER &nbsp;✦&nbsp; PHYSICS CHAOS &nbsp;✦&nbsp; STYLISH DESTRUCTION &nbsp;✦&nbsp;
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">KRAZY KART</span>
+  <span class="nav-sep">|</span>
+  <a href="#vision">Vision</a>
+  <a href="#loop">Core Loop</a>
+  <a href="#difficulty">Difficulty</a>
+  <a href="#mc">Mall Credits</a>
+  <a href="#floors">Floors</a>
+  <a href="#transitions">Transitions</a>
+  <a href="#scoring">Scoring</a>
+  <a href="#cops">Cop System</a>
+  <a href="#boss">Boss Floor</a>
+  <a href="#leaderboard">Leaderboard</a>
+  <a href="#art">Art & Tech</a>
+  <a href="#open">Open Variables</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-eyebrow">GAME DESIGN DOCUMENT — VERSION 1.0</div>
+  <div class="hero-title">KRAZY<br><span>KART</span></div>
+  <div class="hero-sub">A hyper-stylized slapstick physics runner where a runaway trolley kart ascends through a procedurally generated mall, gaining time, power, and survivability through stylish destruction.</div>
+
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Genre</div>
+      <div class="hero-meta-value">Arcade Runner</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Session Length</div>
+      <div class="hero-meta-value">~15 Minutes</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Floors</div>
+      <div class="hero-meta-value">6–8 + Boss</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Platform</div>
+      <div class="hero-meta-value">TBD</div>
+    </div>
+  </div>
+
+  <div class="hero-pill-row">
+    <span class="pill pill-yellow">Slapstick Physics</span>
+    <span class="pill pill-orange">Stylish Destruction</span>
+    <span class="pill pill-red">Cop Chase</span>
+    <span class="pill pill-outline">Procedural Layouts</span>
+    <span class="pill pill-outline">Mall Credit Economy</span>
+    <span class="pill pill-outline">Boss Escape Sequence</span>
+  </div>
+</section>
+
+<!-- 1. VISION -->
+<section class="section" id="vision">
+  <div class="section-eyebrow">01 — EXPERIENCE VISION</div>
+  <div class="section-title">What is <span class="accent">Krazy Kart?</span></div>
+
+  <div class="vision-quote">
+    <p>"Imagine a mall designed by a stunt choreographer and approved by a cartoon physicist."</p>
+    <cite>Core tone mandate</cite>
+  </div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    Krazy Kart is an arcade runner where destruction is currency, style is strategy, and every run teaches you something new. Players ascend a procedurally generated mall from basement parking to the manager's office — leaving chaos in their wake and banking time for the final rooftop escape.
+  </p>
+
+  <div class="tone-grid">
+    <div class="tone-cell">
+      <div class="tone-icon">💥</div>
+      <div class="tone-label">Playful Anarchy</div>
+      <div class="tone-desc">Nothing is off-limits. Everything can be destroyed. Everyone overreacts.</div>
+    </div>
+    <div class="tone-cell">
+      <div class="tone-icon">🎭</div>
+      <div class="tone-label">Physical Comedy</div>
+      <div class="tone-desc">Ragdolls, flying trays, and tumbling appliances. The physics engine IS the joke.</div>
+    </div>
+    <div class="tone-cell">
+      <div class="tone-icon">🎮</div>
+      <div class="tone-label">Controlled Absurdity</div>
+      <div class="tone-desc">Chaotic visually, readable mechanically. Every element serves gameplay.</div>
+    </div>
+    <div class="tone-cell">
+      <div class="tone-icon">🏆</div>
+      <div class="tone-label">Skill Expression</div>
+      <div class="tone-desc">Casual players have fun. Experts get significantly more time and higher scores.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CORE LOOP -->
+<section class="section" id="loop">
+  <div class="section-eyebrow">02 — CORE LOOP</div>
+  <div class="section-title">Every Run, <span class="accent">Every Time</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    A single run lasts ~15 minutes. Every floor is immediately accessible — but performance in each floor directly determines how much escape time you bank for the final sequence. The loop rewards replayability: the same floors feel different based on your chosen playstyle.
+  </p>
+
+  <div class="loop-flow">
+    <div class="loop-step">
+      <div class="loop-step-num">01</div>
+      <div class="loop-step-title">Basement Spawn</div>
+      <div class="loop-step-desc">Kart launches into B1 parking. Physics established. First boost.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-step-num">02</div>
+      <div class="loop-step-title">Floor Ascent</div>
+      <div class="loop-step-desc">6–8 floors. Choose your style per floor: rush, destroy, or showboat.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-step-num">03</div>
+      <div class="loop-step-title">Earn Mall Credit</div>
+      <div class="loop-step-desc">Destruction, style combos, NPC hits and cop evasions convert to MC.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-step-num">04</div>
+      <div class="loop-step-title">MC → Time Buffer</div>
+      <div class="loop-step-desc">Total MC converts to escape time. More MC = more room to breathe.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-step-num">05</div>
+      <div class="loop-step-title">Boss Floor</div>
+      <div class="loop-step-desc">Manager's office. Environment becomes hostile. Shutters drop. Clock ticks.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-step-num">06</div>
+      <div class="loop-step-title">Glass Smash Exit</div>
+      <div class="loop-step-desc">Boost runway. Full speed. Glass shatters. Cinematic slow-mo. Ragdoll glory.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Key Design Insight:</strong> All floors are accessible immediately — no unlock gates. This means the player always feels in control. The consequence of "easy" floors is less escape time in the boss sequence. Difficulty emerges from the player's own choices, not gating.
+  </div>
+</section>
+
+<!-- 3. DIFFICULTY -->
+<section class="section" id="difficulty">
+  <div class="section-eyebrow">03 — DIFFICULTY PHILOSOPHY</div>
+  <div class="section-title">You Choose <span class="accent">How Hard</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    Krazy Kart has no explicit difficulty slider. Instead, the player's playstyle determines how challenging the boss escape will be. Interaction-heavy runs bank more MC and more escape time. Speed runs are short but brutal. Stylish runs find the optimal balance.
+  </p>
+
+  <div class="diff-grid">
+    <div class="diff-card rush">
+      <div class="diff-tag">PLAYSTYLE 01</div>
+      <div class="diff-title">Speedrunner</div>
+      <div class="diff-desc">Rush through floors with minimal interaction. Fast, efficient, and deliberately difficult. Low MC means a tight escape window — every second counts in the boss.</div>
+      <div class="diff-stats">
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Floor time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:20%;background:var(--green)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">MC earned</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:15%;background:var(--green)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Escape time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:15%;background:var(--red)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Boss difficulty</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:95%;background:var(--red)"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="diff-card destroy">
+      <div class="diff-tag">PLAYSTYLE 02</div>
+      <div class="diff-title">Destroyer</div>
+      <div class="diff-desc">Max chaos, max destruction. Slow through floors but huge MC hauls. The boss escape is forgiving — you have time to make mistakes. Trade efficiency for safety.</div>
+      <div class="diff-stats">
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Floor time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:85%;background:var(--orange)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">MC earned</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:90%;background:var(--orange)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Escape time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:85%;background:var(--green)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Boss difficulty</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:20%;background:var(--green)"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="diff-card style">
+      <div class="diff-tag">PLAYSTYLE 03</div>
+      <div class="diff-title">Showboater</div>
+      <div class="diff-desc">Drift near objects for style MC. Chain combos. Hit stunts. Optimal scoring efficiency — not the fastest or most destructive, but the highest MC per second. The ideal balance.</div>
+      <div class="diff-stats">
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Floor time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:55%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">MC earned</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:75%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Escape time</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:65%;background:var(--yellow)"></div></div>
+        </div>
+        <div class="diff-stat-row">
+          <span class="diff-stat-label">Boss difficulty</span>
+          <div class="diff-bar-wrap"><div class="diff-bar" style="width:40%;background:var(--yellow)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. MALL CREDIT -->
+<section class="section" id="mc">
+  <div class="section-eyebrow">04 — PRIMARY CURRENCY</div>
+  <div class="section-title">The <span class="accent">Mall Credit</span> System</div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 12px;">
+    Mall Credit (MC) is the game's single performance resource. It is simultaneously your score, your currency, and your survival mechanism. Every destructive, stylish, or evasive action earns MC. At the end of all floors, your total MC converts directly into seconds of escape time.
+  </p>
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px; font-style: italic; font-size: 13px;">
+    Diegetically: MC is your mall reputation score, security bribe fund, black-market shopping credit, and insurance liability rating — all in one.
+  </p>
+
+  <div class="mc-table-wrap">
+    <table class="mc-table">
+      <thead>
+        <tr>
+          <th>Mall Credit Earned</th>
+          <th>Escape Time Buffer</th>
+          <th>Difficulty Feel</th>
+          <th style="width:200px">Time Bar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="mc-val">0 MC</span></td>
+          <td><span class="mc-time">12 sec</span></td>
+          <td style="color:var(--red);font-size:13px">Brutal — nearly impossible</td>
+          <td class="mc-bar-cell"><div class="mc-bar-outer"><div class="mc-bar-inner" style="width:14%"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="mc-val">200 MC</span></td>
+          <td><span class="mc-time">20 sec</span></td>
+          <td style="color:var(--orange);font-size:13px">Very hard — no margin for error</td>
+          <td class="mc-bar-cell"><div class="mc-bar-outer"><div class="mc-bar-inner" style="width:24%"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="mc-val">500 MC</span></td>
+          <td><span class="mc-time">35 sec</span></td>
+          <td style="color:var(--yellow);font-size:13px">Hard — one or two mistakes allowed</td>
+          <td class="mc-bar-cell"><div class="mc-bar-outer"><div class="mc-bar-inner" style="width:41%"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="mc-val">900 MC</span></td>
+          <td><span class="mc-time">55 sec</span></td>
+          <td style="color:var(--green);font-size:13px">Manageable — casual-friendly</td>
+          <td class="mc-bar-cell"><div class="mc-bar-outer"><div class="mc-bar-inner" style="width:65%"></div></div></td>
+        </tr>
+        <tr>
+          <td><span class="mc-val">1400 MC</span></td>
+          <td><span class="mc-time">85 sec</span></td>
+          <td style="color:var(--blue);font-size:13px">Comfortable — stylish exit</td>
+          <td class="mc-bar-cell"><div class="mc-bar-outer"><div class="mc-bar-inner" style="width:100%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>Design Intent:</strong> The time buffer represents security lockdown delay, shutter closing speed, and trap activation timing. The more MC you've banked, the slower the mall "reacts" to your escape — giving you room to maneuver, attempt stunts, and style your way out. Low MC = maximum hostility from frame one.
+  </div>
+</section>
+
+<!-- 5. FLOORS -->
+<section class="section" id="floors">
+  <div class="section-eyebrow">05 — MALL STRUCTURE</div>
+  <div class="section-title">8 Floors of <span class="accent">Pure Chaos</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    Each floor is a procedurally assembled sandbox track. All floors are open from the start — the player chooses which floors to engage deeply and which to rush. Every floor guarantees at least two viable paths and a mix of wide flow zones, tight technical aisles, vertical stunt routes, and destruction clusters.
+  </p>
+
+  <div class="vert-diagram">
+    <div class="vert-floor" style="border-left: 3px solid var(--red);">
+      <div class="vert-floor-label">BOSS</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Manager's Office</div>
+        <div class="vert-features">
+          <span class="vert-feature">COUNTDOWN TIMER</span>
+          <span class="vert-feature">HOSTILE ENV</span>
+          <span class="vert-feature">GLASS RUNWAY</span>
+          <span class="vert-feature">RAGDOLL EXIT</span>
+        </div>
+        <div class="vert-mc" style="color: var(--red);">ALL MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--orange);">
+      <div class="vert-floor-label">F8</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Home Furniture & Interiors</div>
+        <div class="vert-features">
+          <span class="vert-feature">CRATE MOUNTAIN</span>
+          <span class="vert-feature">SOFA MAZE</span>
+          <span class="vert-feature">GLASS PARTITIONS</span>
+          <span class="vert-feature">COP ROADBLOCK</span>
+        </div>
+        <div class="vert-mc">200–600 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--orange);">
+      <div class="vert-floor-label">F7</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Sports & Toys</div>
+        <div class="vert-features">
+          <span class="vert-feature">HALF-PIPE</span>
+          <span class="vert-feature">BALL PIT CHAOS</span>
+          <span class="vert-feature">RC CAR TRACK</span>
+          <span class="vert-feature">TRAMPOLINE ZONE</span>
+        </div>
+        <div class="vert-mc">180–500 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--yellow);">
+      <div class="vert-floor-label">F6</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Electronics & Appliances</div>
+        <div class="vert-features">
+          <span class="vert-feature">TV WALL</span>
+          <span class="vert-feature">DISPLAY TOWERS</span>
+          <span class="vert-feature">SERVER CAGE</span>
+          <span class="vert-feature">CHAIN DESTROY</span>
+        </div>
+        <div class="vert-mc">120–380 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--yellow);">
+      <div class="vert-floor-label">F5</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Fashion & Clothing</div>
+        <div class="vert-features">
+          <span class="vert-feature">MANNEQUIN FIELD</span>
+          <span class="vert-feature">CHANGING ROOM MAZE</span>
+          <span class="vert-feature">ESCALATOR RAMP</span>
+        </div>
+        <div class="vert-mc">100–300 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--green);">
+      <div class="vert-floor-label">F4</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Supermarket</div>
+        <div class="vert-features">
+          <span class="vert-feature">SHOPPING TROLLEYS</span>
+          <span class="vert-feature">SHELF COLLAPSE</span>
+          <span class="vert-feature">FRIDGE AISLE</span>
+          <span class="vert-feature">OPEN DRIFT</span>
+        </div>
+        <div class="vert-mc">100–260 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--green);">
+      <div class="vert-floor-label">F2–3</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Food Court</div>
+        <div class="vert-features">
+          <span class="vert-feature">NPC CROWDS</span>
+          <span class="vert-feature">KITCHEN CLUSTER</span>
+          <span class="vert-feature">MEZZANINE RAMP</span>
+          <span class="vert-feature">TRAY TOWER</span>
+        </div>
+        <div class="vert-mc">80–280 MC</div>
+      </div>
+    </div>
+    <div class="vert-floor" style="border-left: 3px solid var(--blue);">
+      <div class="vert-floor-label">B1</div>
+      <div class="vert-floor-content">
+        <div class="vert-floor-name">Basement Parking</div>
+        <div class="vert-features">
+          <span class="vert-feature">TUTORIAL RAMP</span>
+          <span class="vert-feature">OPEN DRIFT BAY</span>
+          <span class="vert-feature">PILLAR MAZE</span>
+          <span class="vert-feature">NO COPS</span>
+        </div>
+        <div class="vert-mc">0–140 MC</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 24px;">
+    <div class="section-eyebrow" style="margin-bottom: 16px;">FLOOR LAYOUT PRINCIPLES</div>
+    <div class="two-col">
+      <div class="infoblock">
+        <div class="infoblock-title">GUARANTEED IN EVERY FLOOR</div>
+        <ul>
+          <li>At least 2 viable navigation paths to the exit</li>
+          <li>One open flow zone (wide, boost-friendly)</li>
+          <li>One destruction cluster (dense props, high MC)</li>
+          <li>One optional vertical route (stunt/shortcut)</li>
+          <li>Procedural guarantee: exit always reachable</li>
+        </ul>
+      </div>
+      <div class="infoblock">
+        <div class="infoblock-title">VERTICALITY EXAMPLES</div>
+        <ul>
+          <li>Ramps from fallen shelves or toppled fridges</li>
+          <li>Mezzanine balconies via escalator drift</li>
+          <li>Half-pipe toy displays and skateboard ramps</li>
+          <li>Stacked crate pyramids and showroom platforms</li>
+          <li>Secret ceiling shortcuts for expert players</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. INTER-FLOOR TRANSITIONS -->
+<section class="section" id="transitions">
+  <div class="section-eyebrow">06 — TRANSITION CORRIDORS</div>
+  <div class="section-title">The <span class="accent">Spiral</span> System</div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 24px;">
+    Inspired by Tokyo Drift parking spirals — C-shaped transition corridors connect every floor. They serve three critical purposes: breathing space between chaos arenas, streaming buffer for the next level, and a showcase moment for drift skill. Clean lines through the spiral reward boost chaining.
+  </p>
+
+  <div class="transition-strip">
+    <div>
+      <div class="transition-heading">DESIGN GOALS</div>
+      <div class="transition-title">Between Every Floor</div>
+      <div class="transition-desc">Encourage drifting. Allow boost chaining. Reward clean lines. No obstacles — just momentum and style. The kart should feel amazing to drive through these sections.</div>
+    </div>
+    <div>
+      <div class="transition-heading">VISUAL THEMES</div>
+      <div class="transition-themes">
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--blue)"></span>Parking spiral (B1 → F1)</div>
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--orange)"></span>Service corridor (F1 → F2)</div>
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--yellow)"></span>Delivery ramp (F2 → F3)</div>
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--green)"></span>Glass elevator shaft (F3 → F4)</div>
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--pink)"></span>Maintenance tunnel (F5 → F6)</div>
+        <div class="transition-theme"><span class="theme-dot" style="background:var(--red)"></span>Emergency stairwell (F7 → Boss)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. SCORING -->
+<section class="section" id="scoring">
+  <div class="section-eyebrow">07 — SCORING SYSTEM</div>
+  <div class="section-title">How You <span class="accent">Earn MC</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    Every action in the mall has a MC value. The system is designed so that all three playstyles (rush, destroy, style) can accumulate MC — but the highest ceiling belongs to stylish combos and cop evasions.
+  </p>
+
+  <div class="scoring-grid">
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--orange)"></span><span class="score-action">Destroying props</span></div>
+      <span class="score-reward">+5 to +20 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--red)"></span><span class="score-action">Chain destruction</span></div>
+      <span class="score-reward">+30 to +80 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--yellow)"></span><span class="score-action">Drifting near objects</span></div>
+      <span class="score-reward">+10 to +25 MC (style)</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--orange)"></span><span class="score-action">Hitting NPCs (non-fatal)</span></div>
+      <span class="score-reward">+15 to +40 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--yellow)"></span><span class="score-action">Active combo streak</span></div>
+      <span class="score-reward">x1.5 → x4 multiplier</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--pink)"></span><span class="score-action">Stunt routes / air time</span></div>
+      <span class="score-reward">+40 to +120 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--green)"></span><span class="score-action">Evading cop karts</span></div>
+      <span class="score-reward">+50 to +150 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--blue)"></span><span class="score-action">Time efficiency bonus</span></div>
+      <span class="score-reward">+20 to +60 MC / floor</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--red)"></span><span class="score-action">Knocking cop into obstacle</span></div>
+      <span class="score-reward">+80 to +200 MC</span>
+    </div>
+    <div class="score-row">
+      <div style="display:flex;align-items:center"><span class="score-dot" style="background:var(--pink)"></span><span class="score-action">Transition corridor clean run</span></div>
+      <span class="score-reward">+25 to +70 MC</span>
+    </div>
+  </div>
+</section>
+
+<!-- 8. COP SYSTEM -->
+<section class="section" id="cops">
+  <div class="section-eyebrow">08 — COP KART SYSTEM</div>
+  <div class="section-title">Security Always <span class="accent">Escalates</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    Cops are not random spawn events — they are a direct response to the player's chaos output. Higher destruction = more cop karts = more pressure. The system prevents passive play and keeps all playstyles engaged. Importantly, evading or eliminating cops is one of the highest MC yields in the game.
+  </p>
+
+  <div class="cop-grid">
+    <div class="cop-panel threat">
+      <div class="cop-panel-title">THREAT BEHAVIOURS</div>
+      <ul class="cop-list">
+        <li>Box-in attempts — two karts flank the player and converge</li>
+        <li>Ram pressure — direct high-speed collision attempts</li>
+        <li>Lane blocking — cops position ahead to redirect into obstacles</li>
+        <li>Herding — cops work in formation to funnel toward walls</li>
+        <li>Ambush spawns — appearing from side doors after high destruction</li>
+        <li>Ramp denial — cops position at stunt route entrances</li>
+      </ul>
+    </div>
+    <div class="cop-panel escape">
+      <div class="cop-panel-title">PLAYER COUNTER OPTIONS</div>
+      <ul class="cop-list">
+        <li>Outmaneuver — use superior boost and drift to lose them</li>
+        <li>Environmental knock — drift into a cop and send it into a shelf</li>
+        <li>Verticality escape — ramps cops cannot navigate</li>
+        <li>Physics toy traps — ball pits, swinging signs, rolling carts</li>
+        <li>Cop-on-cop redirect — angle so two cops collide with each other</li>
+        <li>NPC crowd scatter — using a crowd to break cop formation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Spawn Thresholds (Proposed):</strong> First cop at 3+ destroyed props per floor. Second cop at 6+ destructions OR one NPC ragdoll. Third cop in formation at 10+ destructions. Maximum active karts: 4. Cops despawn at floor transition — clean slate each level.
+  </div>
+</section>
+
+<!-- 9. BOSS FLOOR -->
+<section class="section" id="boss">
+  <div class="section-eyebrow">09 — BOSS FLOOR</div>
+  <div class="section-title">The Manager's <span class="accent">Office</span></div>
+
+  <div class="boss-section">
+    <div class="boss-title">FINAL ESCAPE SEQUENCE</div>
+    <div class="boss-sub">Tone: Sterile. Premium. Minimal clutter. Maximum danger.</div>
+
+    <p style="color: var(--muted); font-size: 14px; line-height: 1.8; max-width: 600px; margin-bottom: 28px;">
+      The boss floor is a dramatic tonal contrast to the chaos below. Where floors are loud and colourful, the office is clinical and white — until it isn't. The player's banked MC is now their survival runway. The environment becomes progressively hostile over time.
+    </p>
+
+    <div class="boss-phases">
+      <div class="boss-phase">
+        <div class="boss-phase-num">PHASE 01</div>
+        <div class="boss-phase-name">Clean Entry</div>
+        <div class="boss-phase-desc">First 8 seconds. Clear floor. Only obstacle is the sterile layout. Shutters visible but open. Clock ticking.</div>
+      </div>
+      <div class="boss-phase">
+        <div class="boss-phase-num">PHASE 02</div>
+        <div class="boss-phase-name">Lockdown Begins</div>
+        <div class="boss-phase-desc">Shutters start closing. Glass partitions slide into position. Security bollards deploy from the floor.</div>
+      </div>
+      <div class="boss-phase">
+        <div class="boss-phase-num">PHASE 03</div>
+        <div class="boss-phase-name">Active Hostility</div>
+        <div class="boss-phase-desc">Floor-cleaning robots create slippery paths. Rotating doors form timing puzzles. Escalating hazard density.</div>
+      </div>
+      <div class="boss-phase">
+        <div class="boss-phase-num">PHASE 04</div>
+        <div class="boss-phase-name">Glass Runway</div>
+        <div class="boss-phase-desc">Long corridor opens. Player builds full boost. Glass wall at the end. Cinematic slow-motion ragdoll exit. Victory laundry.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin: 0;">
+      <strong>Cinematic Exit:</strong> At full speed, the kart hits the glass wall at the end of the corridor. Time slows to 20%. The kart ragdolls through in a shower of glass. The ragdoll "flaps dramatically like victory laundry" as the building falls away behind it. Run complete.
+    </div>
+  </div>
+</section>
+
+<!-- 10. LEADERBOARD -->
+<section class="section" id="leaderboard">
+  <div class="section-eyebrow">10 — LEADERBOARD STRUCTURE</div>
+  <div class="section-title">Six Ways to <span class="accent">Be the Best</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    The leaderboard celebrates all playstyles. Speedrunners, destroyers, stylish drivers, and minimalist runners all have a category to chase. No single approach dominates all boards — community diversity is a designed outcome.
+  </p>
+
+  <div class="lb-grid">
+    <div class="lb-card">
+      <div class="lb-icon">⚡</div>
+      <div class="lb-name">Fastest Escape Time</div>
+      <div class="lb-desc">Raw speedrun category. Minimal MC, maximum precision. Clock ends on ragdoll exit.</div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-icon">💰</div>
+      <div class="lb-name">Highest Mall Credit</div>
+      <div class="lb-desc">Total MC accumulated across all floors. Rewards destruction and style equally.</div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-icon">🔗</div>
+      <div class="lb-name">Longest Combo Chain</div>
+      <div class="lb-desc">Maximum number of consecutive actions without breaking the streak. Technique-focused.</div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-icon">🧊</div>
+      <div class="lb-name">Least Destruction Run</div>
+      <div class="lb-desc">Successful escape with the minimum props destroyed. Ghost-mode challenge.</div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-icon">💥</div>
+      <div class="lb-name">Max Destruction Run</div>
+      <div class="lb-desc">Most props destroyed in a successful escape. Chaos maximalist category.</div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-icon">🎨</div>
+      <div class="lb-name">Style Score Run</div>
+      <div class="lb-desc">Weighted score: MC × combo multiplier average × stunt count. Showboater's crown.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. ART & TECH -->
+<section class="section" id="art">
+  <div class="section-eyebrow">11 — ART DIRECTION & TECHNICAL NOTES</div>
+  <div class="section-title">Look, Feel & <span class="accent">Build</span></div>
+
+  <div class="two-col" style="margin-bottom: 24px;">
+    <div class="infoblock">
+      <div class="infoblock-title">ART DIRECTION</div>
+      <ul>
+        <li>Hyper-stylized casual look — not realistic, not cartoon. In between.</li>
+        <li>Chunky props, slightly exaggerated scale, soft rounded edges everywhere.</li>
+        <li>Bright plastics, saturated packaging, maximum silhouette readability.</li>
+        <li>Destruction readability over realism — props break clearly, not subtly.</li>
+        <li>Ragdoll exaggeration encouraged: comedy over physics accuracy.</li>
+        <li>Physical comedy is the primary visual language.</li>
+      </ul>
+    </div>
+    <div class="infoblock">
+      <div class="infoblock-title">UI PHILOSOPHY</div>
+      <ul>
+        <li>Minimal clutter. The floor is the experience.</li>
+        <li>Bottom left: mini map showing current floor layout.</li>
+        <li>Top right: Mall Credit counter (animated on earn).</li>
+        <li>Centre: lightweight objective hints only.</li>
+        <li>Boss floor: countdown timer becomes dominant, full-screen tension.</li>
+        <li>Combo streak shown as a satisfying escalating counter.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="infoblock">
+      <div class="infoblock-title">PROCEDURAL TECH REQUIREMENTS</div>
+      <ul>
+        <li>Layout graph approach: nodes are module types, edges are connections.</li>
+        <li>Guaranteed navigable path from entry to exit on every generation.</li>
+        <li>Vertical routes optional — never block the main path.</li>
+        <li>Object density scales with floor number (B1 sparse → F8 dense).</li>
+        <li>Cop spawn zones pre-baked into layout, not random placement.</li>
+        <li>Streaming buffer: next floor generates during transition corridor.</li>
+      </ul>
+    </div>
+    <div class="infoblock">
+      <div class="infoblock-title">VERTICAL SLICE MUST PROVE</div>
+      <ul>
+        <li>Kart controls feel great from first second — responsive, weighty, fun.</li>
+        <li>Destruction is visually rewarding and mechanically satisfying.</li>
+        <li>Procedural layout is replayable — same floor type, different feel.</li>
+        <li>Boss escape sequence generates genuine tension and payoff.</li>
+        <li>MC system communicates clearly — player always knows why they earned.</li>
+        <li>15-minute session length feels complete and not padded.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12. OPEN VARIABLES -->
+<section class="section" id="open">
+  <div class="section-eyebrow">12 — OPEN DESIGN VARIABLES</div>
+  <div class="section-title">Still To <span class="accent">Define</span></div>
+
+  <p style="color: var(--muted); line-height: 1.8; max-width: 700px; margin-bottom: 32px;">
+    These values require playtesting to lock in. The ranges below represent our best first estimates based on the 15-minute target session and the MC conversion table. Every value should be tunable per-floor to allow difficulty curves.
+  </p>
+
+  <div class="vars-grid">
+    <div class="var-cell">
+      <div class="var-label">Average Floor Size</div>
+      <div class="var-value">TBD</div>
+      <div class="var-note">Target: 60–90 seconds per floor at casual pace. Needs tuning vs proc-gen output.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Destruction Sweet Spot</div>
+      <div class="var-value">~40%</div>
+      <div class="var-note">Target: 40% of props destroyed = optimal MC per time ratio. To be validated.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">MC Per Floor (Target)</div>
+      <div class="var-value">150–200</div>
+      <div class="var-note">Across 7 floors at 175 avg = ~1225 MC → ~75 sec escape. Feels right.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Boss Base Time</div>
+      <div class="var-value">12 sec</div>
+      <div class="var-note">Minimum floor time at 0 MC. Should feel genuinely impossible solo-run.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Cop Spawn Threshold</div>
+      <div class="var-value">3 props</div>
+      <div class="var-note">First cop appears after 3 destructions. Escalates to 3-cop formations at 10+.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Modules Per Floor</div>
+      <div class="var-value">4–6</div>
+      <div class="var-note">4 minimum, 6 maximum. Core + 2 optional + exit. Enough for variety, not overwhelming.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Vertical Route Frequency</div>
+      <div class="var-value">1 per floor</div>
+      <div class="var-note">Guaranteed 1 vertical route per floor. Frequency of a second TBD per biome type.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Transition Corridor Length</div>
+      <div class="var-value">~15 sec</div>
+      <div class="var-note">15 seconds of clean driving. Enough to load next floor + let player breathe.</div>
+    </div>
+    <div class="var-cell">
+      <div class="var-label">Max Active Cop Karts</div>
+      <div class="var-value">4</div>
+      <div class="var-note">4 maximum simultaneous cops. Beyond that: frame rate risk and overwhelm risk.</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <div class="section-eyebrow" style="margin-bottom: 16px;">NEXT DESIGN STEPS</div>
+    <div class="two-col">
+      <div class="infoblock">
+        <div class="infoblock-title">IMMEDIATE PRIORITIES</div>
+        <ul>
+          <li>Define procedural module categories with exact dimensions</li>
+          <li>Prototype kart physics — feel must be established first</li>
+          <li>Build first vertical slice (B1 + Food Court + Boss transition)</li>
+          <li>Validate the MC table against actual playtest sessions</li>
+          <li>Lock in the destruction readability art style with one prop type</li>
+        </ul>
+      </div>
+      <div class="infoblock">
+        <div class="infoblock-title">MODULE TYPES TO DEFINE</div>
+        <ul>
+          <li>Aisle module — linear, two lane widths</li>
+          <li>Corner module — 90° drift turn, momentum test</li>
+          <li>Vertical ramp module — angled with landing zone</li>
+          <li>Destruction cluster module — dense props, contained</li>
+          <li>Open drift arena module — wide, minimal structure</li>
+          <li>Narrow skill corridor module — combo multiplier zone</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">KRAZY KART</div>
+  <div class="footer-info">
+    Game Design Document v1.0<br>
+    Classification: Internal Development<br>
+    Status: Pre-Production · In Active Design
+  </div>
+</footer>
+
+</body>
+</html>
