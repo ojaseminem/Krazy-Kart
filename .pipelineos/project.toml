@@ -10,7 +10,7 @@ enabled_health_checks = [
 
 [[linked_apps]]
 app_id = "unity"
-preferred_version = "6000.4.8"
+preferred_version = "6000.3.7"
 folder = "."
 
 [[linked_apps]]
