@@ -17,6 +17,10 @@
 # Recordings can get excessive in size
 /[Rr]ecordings/
 
+# Screenshots can get excessive in size
+/[Aa]ssets/[Ss]creenshots/
+/[Aa]ssets/[Ss]creenshots.meta
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
 

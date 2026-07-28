@@ -7,13 +7,56 @@
 | Phase | Name              | Status      |
 |-------|-------------------|-------------|
 | 0     | Foundation        | ✅ DONE     |
-| 1     | Floor Systems     | 🔲 NEXT     |
-| 2     | Cop System        | 🔲 PENDING  |
-| 3     | MC & Scoring      | 🔲 PENDING  |
-| 4     | Procedural Layout | 🔲 PENDING  |
-| 5     | Boss Floor        | 🔲 PENDING  |
-| 6     | Polish & VFX      | 🔲 PENDING  |
-| 7     | UI & Leaderboard  | 🔲 PENDING  |
+| 1     | Floor Systems     | ✅ DONE     |
+| 2     | Cop System        | ✅ DONE     |
+| 3     | MC & Scoring      | ✅ DONE     |
+| 4     | Procedural Layout | ⚪ REPLACED — see "Mall layout" below |
+| 5     | Boss Floor        | ✅ DONE     |
+| 6     | Polish & VFX      | 🟡 PARTIAL — VFX Graph assets in, art pass pending |
+| 7     | UI & Leaderboard  | 🟡 PARTIAL — HUD + run summary in, leaderboard pending |
+
+---
+
+## CURRENT BUILD (as of this session)
+
+**Main menu** — `MenuScene`. 3D drift-in cinematic, UI pops in after it settles, Play expands to
+Normal Run / Free Run, exit drives the kart past camera into a fade. Panels (Settings) are
+prefabs under `Resources/MenuPanels/` and are spawned on demand, so editing one never dirties
+the menu scene.
+
+**Loading** — persistent `LoadingScreenService` + `LoadingScreen` prefab (bar, kart riding the
+fill, stage label). The view is pure presentation; the staged pacing lives in
+`GameplayLoadDirector` on the gameplay side, tunable per mode in the Inspector.
+
+**Mall layout** — one continuous vertical space, not streamed floor scenes. `MallBuilder`
+(menu: **KrazyKart → Rebuild Mall**) generates all 8 floors bottom-to-top, each a hall open
+along +X onto a ramp shaft. The player lands on a shaft landing, crosses the floor wrecking
+props, re-enters the shaft at its low end and climbs. Re-runnable and deterministic per floor.
+Themes and prop lists live in `MallTheme.cs`.
+
+Replaces Phase 4's per-floor procedural graph: the mall reads as one space, and a single scene
+removes a whole class of streaming/load-timing bugs.
+
+**Scoring** — `McManager` (total, combo multiplier, chain window), `DestructibleProp`
+(impact-speed damage, splash that cascades through clusters), `StyleScorer` (drift, near-miss,
+airtime). All values in `ScoringConfig` SO. MC → escape seconds is an AnimationCurve matching
+the GDD table exactly (verified: 900 MC → 55s, 1400 MC → 85s).
+
+**Cops** — `CopSpawner` spawns from per-floor destruction thresholds; `CopKart` chases a lead
+point ahead of the player, rams up close, gives up past a distance (paying evade MC), and can be
+shoved into props for bonus MC.
+
+**Boss** — `BossSequence` on the top floor. Four phases driven by the escape clock: shutters
+drop, bollards rise, cleaning robots patrol, glass runway opens. `GlassExitTrigger` requires
+speed, then slow-mo into the run summary.
+
+### Known issues
+- Three `The referenced script (Unknown) on this Behaviour is missing!` errors fire on the
+  MenuScene → GameplayScene runtime load. Both scenes, the player prefab and every prop prefab
+  scan clean, and every serialized script GUID resolves; playing either scene directly is
+  clean. Cosmetic — no gameplay impact — but unresolved.
+- Kart/camera handling is final and must not be changed (`Assets/Prefabs/Player/PlayerRig.prefab`).
+- No audio pass yet. No leaderboard persistence yet.
 
 ---
 

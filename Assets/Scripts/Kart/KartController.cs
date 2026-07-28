@@ -71,9 +71,15 @@ namespace Kart
             // Trail emission
             if (Torque >= maxTorque) Emitting(true);
             else if (_isEmitting) Emitting(false);
-            
-            Debug.Log($"MoveInput: {inputHandler.moveInput} | Torque: {Torque} | Brake: {_brake}");
         }
+
+        /// Current planar speed in m/s. Used by scoring and camera-independent gameplay systems.
+        public float SpeedKph => _rigid != null
+            ? new Vector3(_rigid.linearVelocity.x, 0f, _rigid.linearVelocity.z).magnitude * 3.6f
+            : 0f;
+
+        public bool IsDrifting => inputHandler != null && inputHandler.driftInput;
+        public bool IsBoosting => inputHandler != null && inputHandler.boostInput;
         
         #region Wheel and Trail Logic
         private void HandleWheelMovement()
